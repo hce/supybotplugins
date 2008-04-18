@@ -75,6 +75,7 @@ class Playlist(callbacks.Plugin):
             else:
                 self.LogMessage(irc, "E", "logfile created")
         self.logfile.write("%s %d %s\n" % (msgtype, time(), pformat(message)))
+        self.logfile.flush()  # for now, instant flushing only.
 
     def add(self, irc, msg, args, channel, words):
         """[<channel>] <album>, <title>
@@ -114,6 +115,19 @@ class Playlist(callbacks.Plugin):
             cnt = cnt + 1
         irc.reply(" | ".join(response))
     show = wrap(show, ['channel'])
+
+    def remove(self, irc, msg, args, channel, entry):
+        """[<channel>] ID
+
+            Delete an entry"""
+        if not self.Checkpriv(irc, msg, channel): return
+        try:
+            album, title = self.pl[int(entry)]
+            del self.pl[int(entry)]
+            self.LogMessage(irc, "D", {'album': album, 'title': title})
+            irc.replySuccess()
+        except Exception, e: irc.error(pformat(e))
+    remove = wrap(remove, ['channel', 'text'])
 
 
     def next(self, irc, msg, args, channel):
