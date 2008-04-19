@@ -46,6 +46,7 @@ class Playlist(callbacks.Plugin):
     sendChannel = "#c-radar"
     sendMsg = "Now playing: %s from %s"
     logfile = None
+    playing = None
 
     def __init__(self, irc):
         self.__parent = super(Playlist, self)
@@ -158,7 +159,8 @@ class Playlist(callbacks.Plugin):
 
         album, title = self.pl.pop(0)
 
-        self.LogMessage(irc, "M", {"album": album, "title": title})
+        self.playing = {"album": album, "title": title}
+        self.LogMessage(irc, "M", self.playing)
 
         mts = self.sendMsg % (title, album)
         pmsg = privmsg(self.sendChannel, mts)
@@ -166,6 +168,20 @@ class Playlist(callbacks.Plugin):
 
         irc.replySuccess()
     activate = wrap(activate, ['channel'])
+
+    def finished(self, irc, msg, args, channel):
+        """[<channel>]
+
+            Mark a song as finished. Should be called as soon as a song if over."""
+
+        if not self.Checkpriv(irc, msg, channel): return
+        if self.playing == None:
+            irc.error("No song is playing right now")
+            return
+        self.LogMessage(irc, "S", self.playing)
+        self.playing = None
+        irc.replySuccess()
+    finished = wrap(finished, ['channel'])
 
     def clear(self, irc, msg, args, channel):
         """[<channel>]
@@ -178,6 +194,7 @@ class Playlist(callbacks.Plugin):
         if l == 1: parms.append("y")
         else: parms.append("ies")
         parms = tuple(parms)
+        self.playing = None
         self.LogMessage(irc, "E", "logfile closed")
         irc.reply("%d entr%s cleared. New logfile opened." % parms)
         if self.logfile != None:
@@ -187,6 +204,23 @@ class Playlist(callbacks.Plugin):
             self.logfile = None
     clear = wrap(clear, ['channel'])
 
+    def nowplaying(self, irc, msg, args, channel):
+        """[<channel>]
+
+            Show piece currently playing"""
+
+        if self.playing == None:
+            irc.reply("Currently, no song is playing")
+        else:
+            irc.reply("Now playing %(title)s from %(album)s" % self.playing)
+    nowplaying = wrap(nowplaying, ['channel'])
+
+    def help(self, irc, msg, args, channel):
+        """[<channel>]
+
+            For help, see http://78.47.168.174/playlist.txt"""
+        irc.reply("See http://78.47.168.174/playlist.txt")
+    help = wrap(help, ['channel'])
 
 Class = Playlist
 
