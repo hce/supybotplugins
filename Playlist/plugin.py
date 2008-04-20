@@ -143,10 +143,11 @@ class Playlist(callbacks.Plugin):
             irc.reply("A call to activate would activate %s from %s" % (self.pl[0][1], self.pl[0][0]))
     next = wrap(next, ['channel'])
 
-    def activate(self, irc, msg, args, channel):
-        """[<channel>]
+    def activate(self, irc, msg, args, channel, trackID):
+        """[<channel>] [<trackID>]
 
-            Activate next song in the playlist"""
+            Activate song in the playlist. If trackID is not
+            specified, the next track in the queue is used."""
 
         if not self.Checkpriv(irc, msg, channel): return
         if not len(self.pl):
@@ -157,7 +158,10 @@ class Playlist(callbacks.Plugin):
             irc.error("I am not joined in %s" % self.sendChannel)
             return
 
-        album, title = self.pl.pop(0)
+        try:
+            album, title = self.pl.pop(trackID)
+        except:
+            irc.error("Invalid ID. Issue !show to see all valid IDs")
 
         self.playing = {"album": album, "title": title}
         self.LogMessage(irc, "M", self.playing)
@@ -167,7 +171,7 @@ class Playlist(callbacks.Plugin):
         irc.queueMsg(pmsg)
 
         irc.replySuccess()
-    activate = wrap(activate, ['channel'])
+    activate = wrap(activate, ['channel', additional('nonNegativeInt', 0)])
 
     def finished(self, irc, msg, args, channel):
         """[<channel>]
