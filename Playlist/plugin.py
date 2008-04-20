@@ -162,6 +162,7 @@ class Playlist(callbacks.Plugin):
             album, title = self.pl.pop(trackID)
         except:
             irc.error("Invalid ID. Issue !show to see all valid IDs")
+            return
 
         self.playing = {"album": album, "title": title}
         self.LogMessage(irc, "M", self.playing)
