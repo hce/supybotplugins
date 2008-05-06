@@ -39,11 +39,14 @@ def configure(advanced):
     from supybot.questions import expect, anything, something, yn
     conf.registerPlugin('Playlist', True)
 
-
 Playlist = conf.registerPlugin('Playlist')
 # This is where your configuration variables (if any) should go.  For example:
 # conf.registerGlobalValue(Playlist, 'someConfigVariableName',
 #     registry.Boolean(False, """Help for someConfigVariableName."""))
 
+
+conf.registerGlobalValue(Playlist, 'announcementChannel',
+        registry.String("#c-radar",
+                        "The channel the playlist announcements should go to"))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

@@ -34,19 +34,18 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 import supybot.conf as conf
-from supybot.ircmsgs import privmsg
+from supybot.ircmsgs import privmsg, topic
 
 from time import time
 from pprint import pformat
 import os
 
 class Playlist(callbacks.Plugin):
-    """Chaosradio Darmstadt Playlist plugin"""
+    """HC's  Radio playlist plugin"""
 
     sendChannel = "#c-radar"
-    sendMsg = "Now playing: %s from %s"
-    noMusic = "Current topic: %s"
-    topicMsg = "Welcome to C-Radar | http://www.c-radar.de | %s"
+    sendMsg = " | now playing: "
+    titleFormat = "%(title)s from %(album)s"
     logfile = None
     playing = None
 
@@ -169,9 +168,17 @@ class Playlist(callbacks.Plugin):
         self.playing = {"album": album, "title": title}
         self.LogMessage(irc, "M", self.playing)
 
-        mts = self.sendMsg % (title, album)
-        pmsg = privmsg(self.sendChannel, mts)
-        irc.queueMsg(pmsg)
+        #mts = self.sendMsg % (title, album)
+        #pmsg = privmsg(self.sendChannel, mts)
+        #irc.queueMsg(pmsg)
+
+        mts = irc.state.channels[self.sendChannel].topic
+        pos = mts.find(self.sendMsg)
+        if pos != -1: mts = mts[0:pos]
+        mts = mts + self.sendMsg + (self.titleFormat % self.playing)
+
+        tmsg = topic(self.sendChannel, mts)
+        irc.queueMsg(tmsg)
 
         irc.replySuccess()
     activate = wrap(activate, ['channel', additional('nonNegativeInt', 0)])
@@ -187,6 +194,14 @@ class Playlist(callbacks.Plugin):
             return
         self.LogMessage(irc, "S", self.playing)
         self.playing = None
+
+        mts = irc.state.channels[self.sendChannel].topic
+        pos = mts.find(self.sendMsg)
+        if pos != -1:
+            mts = mts[0:pos]
+            tmsg = topic(self.sendChannel, mts)
+            irc.queueMsg(tmsg)
+
         irc.replySuccess()
     finished = wrap(finished, ['channel'])
 
@@ -222,12 +237,13 @@ class Playlist(callbacks.Plugin):
             irc.reply("Now playing %(title)s from %(album)s" % self.playing)
     nowplaying = wrap(nowplaying, ['channel'])
 
-    def help(self, irc, msg, args, channel):
+    def help(self, irc, msg, args, channel, text):
         """[<channel>]
 
             For help, see http://78.47.168.174/playlist.txt"""
         irc.reply("See http://78.47.168.174/playlist.txt")
-    help = wrap(help, ['channel'])
+        #irc.reply(irc.state.channels[channel].topic)
+    help = wrap(help, [additional('channel'), additional('text')])
 
 Class = Playlist
 
