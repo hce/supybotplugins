@@ -45,6 +45,8 @@ class Playlist(callbacks.Plugin):
 
     sendChannel = "#c-radar"
     sendMsg = "Now playing: %s from %s"
+    noMusic = "Current topic: %s"
+    topicMsg = "Welcome to C-Radar | http://www.c-radar.de | %s"
     logfile = None
     playing = None
 
