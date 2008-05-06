@@ -30,35 +30,133 @@
 
 import supybot.utils as utils
 from supybot.commands import *
+from cPickle import dumps, loads, dump, load
 import supybot.plugins as plugins
+import supybot.world as world
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 import supybot.conf as conf
 from supybot.ircmsgs import privmsg, topic
 
-from time import time
+from time import time, localtime, mktime
 from pprint import pformat
 import os
+import sys
 
 class Playlist(callbacks.Plugin):
     """HC's  Radio playlist plugin"""
 
+    # manually saved/loaded stuff
     sendChannel = "#c-radar"
     sendMsg = " | now playing: "
     titleFormat = "%(title)s from %(album)s"
+    nextSendung = "Details for the next show can be found at http://www.c-radar.de/"
+    miscStuff = ["http://www.c-radar.de", "fm 103,4 MHz"]
+    msgSeparator = " | "
+    feedbackMsg = "The show is over; send your feedback to sendung@c-radar.de"
+
+    # transient stuff
     logfile = None
     playing = None
+    topicAnnounced = False
+    feedbackAnnounced = False
 
     def __init__(self, irc):
         self.__parent = super(Playlist, self)
         self.__parent.__init__(irc)
         self.pl = []
+        self.flusher = self.flush
+        self.irc = irc
+        world.flushers.append(self.flusher)
+        try: self.LoadSettings()
+        except Exception, e: sys.stderr.write("Couldn't load settings; using defaults. (%s)" % e)
+
+    def die(self):
+        world.flushers = [x for x in world.flushers if x is not self.flusher]
 
     def Checkpriv(self, irc, msg, channel):
         if msg.nick not in irc.state.channels[channel].ops:
             irc.error("You can't do that thing, when you don't have that swing. (%s)" % msg.nick)
             return False
         return True
+
+    def DataDir(self):
+        dataDir = conf.supybot.directories.data.dirize(self.name())
+        if not os.path.exists(dataDir): os.makedirs(dataDir)
+        return dataDir
+
+    def SaveSettings(self):
+        dd = self.DataDir() + "/globalvars.pickle"
+        f = open(dd + "_tmp", 'w')
+        dump(self.sendChannel, f)
+        dump(self.sendMsg, f)
+        dump(self.titleFormat, f)
+        dump(self.nextSendung, f)
+        dump(self.miscStuff, f)
+        dump(self.msgSeparator, f)
+        f.close()
+        os.rename(dd + "_tmp", dd)
+
+        #logDir = conf.supybot.directories.log.dirize(self.name())
+
+    def LoadSettings(self):
+        dd = self.DataDir() + "/globalvars.pickle"
+        f = open(dd, 'r')
+        self.sendChannel = load(f)
+        self.sendMsg = load(f)
+        self.titleFormat = load(f)
+        self.nextSendung = load(f)
+        self.miscStuff = load(f)
+        self.msgSeparator = load(f)
+        f.close()
+
+    def Date_FDIM(self, secs):
+        dat = localtime(secs)
+        while (dat[6] != 3) or (dat[2] > 7):
+            secs = secs + (3600 * 24) # add one day
+            dat = localtime(secs)
+        return dat
+
+    def Date_NextAnnouncement(self, dat):
+        doa = mktime(dat)
+        doa = doa - (3600 * 24 * 2) # move two days back
+        return doa
+
+    def Date_NextFeedback(self, dat):
+        doa = mktime(dat)
+        doa = doa + (3600 * 4) # advance four hours
+        return doa
+
+    def DoAnnouncements(self, curTime):
+        nextDay = curTime + (3600 * 24)
+        firstDo = self.Date_FDIM(curTime)
+        aTime = self.Date_NextAnnouncement(firstDo)
+        fTime = self.Date_NextFeedback(firstDo)
+
+        #tmsg = privmsg(self.sendChannel, "%d %d %d" % (aTime, curTime, nextDay))
+        #self.irc.queueMsg(tmsg)
+        if (aTime >= curTime) and (aTime <= nextDay):
+            if not self.topicAnnounced:
+                mts = self.msgSeparator.join([self.nextSendung] + self.miscStuff)
+                tmsg = topic(self.sendChannel, mts)
+                self.irc.queueMsg(tmsg)
+                self.topicAnnounced = True
+        elif (fTime >= curTime) and (fTime <= nextDay):
+            if not self.feedbackAnnounced:
+                mts = self.msgSeparator.join([self.feedbackMsg] + self.miscStuff)
+                tmsg = topic(self.sendChannel, mts)
+                self.irc.queueMsg(tmsg)
+                self.feedbackAnnounced = True
+                self.topicAnnounced = False
+        else:
+            self.feedbackAnnounced = False
+            self.topicAnnounced = False
+
+    def flush(self):
+        self.SaveSettings()
+
+        # hack to call that from here...
+        self.DoAnnouncements(time())
 
     def NewLog(self, irc):
         logDir = conf.supybot.directories.log.dirize(self.name())
@@ -102,6 +200,29 @@ class Playlist(callbacks.Plugin):
         self.pl.append((album, title))
         irc.replySuccess()
     add = wrap(add, ['channel', 'text'])
+
+    def nextshow(self, irc, msg, args, channel, topic):
+        """[<channel>] <TopicOfTheNextShow>
+
+        Define the topic of the next show. This will be announced
+        two days before the upcoming show."""
+
+        if not self.Checkpriv(irc, msg, channel): return
+        if topic == '': irc.reply("Topic of the next show is: %s" % self.nextSendung)
+        else:
+            self.nextSendung = topic
+            irc.reply("Thanks. This will be announced two days before the show.")
+    nextshow = wrap(nextshow, ['channel', additional('text', '')])
+
+    def simannounce(self, irc, msg, args, channel, curTime):
+        """[<channel>] <time in secs since jan1st1970
+
+        Debug function"""
+
+        if not self.Checkpriv(irc, msg, channel): return
+
+        self.DoAnnouncements(curTime)
+    simannounce = wrap(simannounce, ['channel', 'nonNegativeInt'])
 
     def show(self, irc, msg, args, channel):
         """[<channel>]
