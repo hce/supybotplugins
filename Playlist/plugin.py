@@ -38,7 +38,7 @@ import supybot.callbacks as callbacks
 import supybot.conf as conf
 from supybot.ircmsgs import privmsg, topic
 
-from time import time, localtime, mktime
+from time import time, localtime, mktime, ctime
 from pprint import pformat
 import os
 import sys
@@ -75,6 +75,9 @@ class Playlist(callbacks.Plugin):
         world.flushers = [x for x in world.flushers if x is not self.flusher]
 
     def Checkpriv(self, irc, msg, channel):
+        if channel not in irc.state.channels:
+            irc.error("No")
+            return False
         if msg.nick not in irc.state.channels[channel].ops:
             irc.error("You can't do that thing, when you don't have that swing. (%s)" % msg.nick)
             return False
@@ -115,6 +118,13 @@ class Playlist(callbacks.Plugin):
         while (dat[6] != 3) or (dat[2] > 7):
             secs = secs + (3600 * 24) # add one day
             dat = localtime(secs)
+
+        dat = list(dat)
+        dat[3] = 23
+        dat[4] = 5
+        dat[5] = 0
+        dat = tuple(dat)
+        
         return dat
 
     def Date_NextAnnouncement(self, dat):
@@ -137,7 +147,8 @@ class Playlist(callbacks.Plugin):
         #self.irc.queueMsg(tmsg)
         if (aTime >= curTime) and (aTime <= nextDay):
             if not self.topicAnnounced:
-                mts = self.msgSeparator.join([self.nextSendung] + self.miscStuff)
+                showDate = ctime(mktime(firstDo))
+                mts = self.msgSeparator.join(["Next show: %s (%s)" % (self.nextSendung, showDate)] + self.miscStuff)
                 tmsg = topic(self.sendChannel, mts)
                 self.irc.queueMsg(tmsg)
                 self.topicAnnounced = True
