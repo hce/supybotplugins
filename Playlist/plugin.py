@@ -113,15 +113,15 @@ class Playlist(callbacks.Plugin):
         self.msgSeparator = load(f)
         f.close()
 
-    def Date_FDIM(self, secs):
+    def Date_FFIM(self, secs):
         dat = localtime(secs)
-        while (dat[6] != 3) or (dat[2] > 7):
+        while (dat[6] != 4) or (dat[2] > 7):
             secs = secs + (3600 * 24) # add one day
             dat = localtime(secs)
 
         dat = list(dat)
-        dat[3] = 23
-        dat[4] = 5
+        dat[3] = 0
+        dat[4] = 0
         dat[5] = 0
         dat = tuple(dat)
         
@@ -129,7 +129,7 @@ class Playlist(callbacks.Plugin):
 
     def Date_NextAnnouncement(self, dat):
         doa = mktime(dat)
-        doa = doa - (3600 * 24 * 2) # move two days back
+        doa = doa - (3600 * 24 * 3) # move three days back
         return doa
 
     def Date_NextFeedback(self, dat):
@@ -139,22 +139,26 @@ class Playlist(callbacks.Plugin):
 
     def DoAnnouncements(self, curTime):
         nextDay = curTime + (3600 * 24)
-        firstDo = self.Date_FDIM(curTime)
-        aTime = self.Date_NextAnnouncement(firstDo)
-        fTime = self.Date_NextFeedback(firstDo)
+        firstFr = self.Date_FFIM(curTime)
+        aTime = self.Date_NextAnnouncement(firstFr)
+        fTime = self.Date_NextFeedback(firstFr)
 
-        #tmsg = privmsg(self.sendChannel, "%d %d %d" % (aTime, curTime, nextDay))
+        #lt = ctime
+        #tmsg = privmsg(self.sendChannel, "atime: %s ftime: %s nextday: %s firstdo: %s curtime: %s" % (lt(aTime), lt(fTime), lt(nextDay), lt(mktime(firstFr)), lt(curTime)))
         #self.irc.queueMsg(tmsg)
-        if (aTime >= curTime) and (aTime <= nextDay):
+        if (aTime <= curTime) and (curTime <= nextDay) and (fTime > curTime):
             if not self.topicAnnounced:
-                showDate = ctime(mktime(firstDo))
+                n_firstFr = self.Date_FFIM(curTime + 3600 * 24 * 3)
+                showDate = ctime(mktime(n_firstFr) - 3600)
                 mts = self.msgSeparator.join(["Next show: %s (%s)" % (self.nextSendung, showDate)] + self.miscStuff)
                 tmsg = topic(self.sendChannel, mts)
                 self.irc.queueMsg(tmsg)
                 self.topicAnnounced = True
-        elif (fTime >= curTime) and (fTime <= nextDay):
+        elif (fTime <= curTime) and (curTime <= nextDay):
             if not self.feedbackAnnounced:
-                mts = self.msgSeparator.join([self.feedbackMsg] + self.miscStuff)
+                n_firstFr = self.Date_FFIM(curTime + 3600 * 24 * 3)
+                showDate = ctime(mktime(n_firstFr) - 3600)
+                mts = self.msgSeparator.join([self.feedbackMsg, "Next show %s" % showDate] + self.miscStuff)
                 tmsg = topic(self.sendChannel, mts)
                 self.irc.queueMsg(tmsg)
                 self.feedbackAnnounced = True
