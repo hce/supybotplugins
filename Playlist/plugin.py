@@ -53,7 +53,7 @@ class Playlist(callbacks.Plugin):
     nextSendung = "Details for the next show can be found at http://www.c-radar.de/"
     miscStuff = ["http://www.c-radar.de", "fm 103,4 MHz"]
     msgSeparator = " | "
-    feedbackMsg = "The show is over; send your feedback to sendung@c-radar.de"
+    feedbackMsg = "The show is over; send your feedback to studio@c-radar.de"
 
     # transient stuff
     logfile = None
