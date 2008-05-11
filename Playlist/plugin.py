@@ -54,8 +54,10 @@ class Playlist(callbacks.Plugin):
     miscStuff = ["http://www.c-radar.de", "fm 103,4 MHz"]
     msgSeparator = " | "
     feedbackMsg = "The show is over; send your feedback to studio@c-radar.de"
+    pl = []
 
     # transient stuff
+    saved = True
     logfile = None
     playing = None
     topicAnnounced = False
@@ -64,12 +66,13 @@ class Playlist(callbacks.Plugin):
     def __init__(self, irc):
         self.__parent = super(Playlist, self)
         self.__parent.__init__(irc)
-        self.pl = []
         self.flusher = self.flush
         self.irc = irc
         world.flushers.append(self.flusher)
         try: self.LoadSettings()
-        except Exception, e: sys.stderr.write("Couldn't load settings; using defaults. (%s)" % e)
+        except Exception, e:
+            sys.stderr.write("Couldn't load settings; using defaults. (%s)" % e)
+            self.saved = False
 
     def die(self):
         world.flushers = [x for x in world.flushers if x is not self.flusher]
@@ -89,6 +92,7 @@ class Playlist(callbacks.Plugin):
         return dataDir
 
     def SaveSettings(self):
+        if self.saved: return
         dd = self.DataDir() + "/globalvars.pickle"
         f = open(dd + "_tmp", 'w')
         dump(self.sendChannel, f)
@@ -97,8 +101,10 @@ class Playlist(callbacks.Plugin):
         dump(self.nextSendung, f)
         dump(self.miscStuff, f)
         dump(self.msgSeparator, f)
+        dump(self.pl, f)
         f.close()
         os.rename(dd + "_tmp", dd)
+        self.saved = True
 
         #logDir = conf.supybot.directories.log.dirize(self.name())
 
@@ -111,7 +117,9 @@ class Playlist(callbacks.Plugin):
         self.nextSendung = load(f)
         self.miscStuff = load(f)
         self.msgSeparator = load(f)
+        self.pl = load(f)
         f.close()
+        self.saved = True
 
     def Date_FFIM(self, secs):
         dat = localtime(secs)
@@ -171,16 +179,19 @@ class Playlist(callbacks.Plugin):
         self.SaveSettings()
 
         # hack to call that from here...
-        self.DoAnnouncements(time())
+        try: self.DoAnnouncements(time())
+        except Exception, e: sys.stderr.write("Error while announcing: %s" % e)
 
     def NewLog(self, irc):
         logDir = conf.supybot.directories.log.dirize(self.name())
         if not os.path.exists(logDir):
             os.makedirs(logDir)
+        self.saved = False
         try:
             self.logfile = open("%s/CLOG%d.txt" % (logDir, time()), 'w')
         except Exception, e:
             irc.error("Cannot open logfile: %s" % e)
+            self.logfile = sys.stderr
 
     def LogMessage(self, irc, msgtype, message):
         if self.logfile == None:
@@ -213,6 +224,7 @@ class Playlist(callbacks.Plugin):
         self.LogMessage(irc, "A", {'album': album, 'title': title})
 
         self.pl.append((album, title))
+        self.saved = False
         irc.replySuccess()
     add = wrap(add, ['channel', 'text'])
 
@@ -226,7 +238,8 @@ class Playlist(callbacks.Plugin):
         if topic == '': irc.reply("Topic of the next show is: %s" % self.nextSendung)
         else:
             self.nextSendung = topic
-            irc.reply("Thanks. This will be announced two days before the show.")
+            self.saved = False
+            irc.reply("Topic set. Will be announced two days before the show.")
     nextshow = wrap(nextshow, ['channel', additional('text', '')])
 
     def simannounce(self, irc, msg, args, channel, curTime):
@@ -264,6 +277,7 @@ class Playlist(callbacks.Plugin):
             del self.pl[int(entry)]
             self.LogMessage(irc, "D", {'album': album, 'title': title})
             irc.replySuccess()
+            self.saved = False
         except Exception, e: irc.error(pformat(e))
     remove = wrap(remove, ['channel', 'text'])
 
@@ -297,6 +311,7 @@ class Playlist(callbacks.Plugin):
 
         try:
             album, title = self.pl.pop(trackID)
+            self.saved = False
         except:
             irc.error("Invalid ID. Issue !show to see all valid IDs")
             return
@@ -354,6 +369,7 @@ class Playlist(callbacks.Plugin):
         parms = tuple(parms)
         self.playing = None
         self.LogMessage(irc, "E", "logfile closed")
+        self.saved = False
         irc.reply("%d entr%s cleared. New logfile opened." % parms)
         if self.logfile != None:
             try:
