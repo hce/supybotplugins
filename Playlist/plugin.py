@@ -389,13 +389,13 @@ class Playlist(callbacks.Plugin):
             irc.reply("Now playing %(title)s from %(album)s" % self.playing)
     nowplaying = wrap(nowplaying, ['channel'])
 
-    def help(self, irc, msg, args, channel, text):
-        """[<channel>]
+    def help(self, irc, msg, args, text):
+        """NO ARGS
 
-            For help, see http://78.47.168.174/playlist.txt"""
-        irc.reply("See http://78.47.168.174/playlist.txt")
+            For help, see http://www.hcesperer.org/supybot/playlist/commands.html"""
+        irc.reply("See http://www.hcesperer.org/supybot/playlist/commands.html")
         #irc.reply(irc.state.channels[channel].topic)
-    help = wrap(help, [additional('channel'), additional('text')])
+    help = wrap(help, [additional('text')])
 
 Class = Playlist
 
