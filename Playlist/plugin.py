@@ -38,10 +38,162 @@ import supybot.callbacks as callbacks
 import supybot.conf as conf
 from supybot.ircmsgs import privmsg, topic
 
-from time import time, localtime, mktime, ctime
+import threading
+import socket
+
+from time import time, localtime, mktime, ctime, sleep
 from pprint import pformat
 import os
 import sys
+import weakref
+
+MAX_TIMEOUT = 60
+
+
+class EOFException(Exception): pass
+
+class LineReader:
+    buf = ''
+    def __init__(self, socket):
+        self.s = socket
+    def readline(self):
+        while True:
+            pos = self.buf.find("\n")
+            if pos != -1:
+                line, self.buf = self.buf[:pos], self.buf[pos + 1:]
+                return line
+            frag = self.s.recv(8192)
+            if frag == None: raise EOFException()
+            if len(frag) == 0: raise EOFException()
+            frag = frag.replace("\r", "")
+            if len(frag) == 0:
+                buf, self.buf = self.buf, ''
+                return buf # EOF
+            self.buf = self.buf + frag
+
+class SockHandler(threading.Thread):
+    def __init__(self, socket, address, irc, plugin, commandlock):
+        threading.Thread.__init__(self)
+        self.s = socket
+        self.address = address
+        self.irc = irc
+        self.plugin = plugin
+        self.commandlock = commandlock
+        self.stop = False
+    def FCT_add(self, parms):
+        try: [album, title] = parms
+        except:
+            self.s.sendall('340 add ALBUM, TITLE\n')
+            return False
+        print 'added %s by %s' % (title, album) 
+    def FCT_quit(self, parms):
+        self.s.sendall('400 Auf Wiedersehen!\n')
+        self.stop = True
+        try: self.s.close()
+        except: pass
+    def stop():
+        self.stop = True
+        try: self.s.close()
+        except: pass
+    def run(self):
+        s = self.s
+        s.settimeout(MAX_TIMEOUT)
+        lr = LineReader(s)
+        functions = self.__class__.__dict__
+        try:
+            while not self.stop:
+                try: line = lr.readline()
+                except socket.timeout:
+                    self.stop = True
+                    try: self.s.sendall('100 timeout\n')
+                    except: pass
+                    try: self.s.close()
+                    except: pass
+                    break
+                line = line.split(' ', 1)
+                if len(line) < 1:
+                    continue
+                command = line[0]
+                if len(line) > 1:
+                    parms = line[1].split(',')
+                    parms = [i.strip() for i in parms]
+                else: parms = []
+                try: function = functions['FCT_%s' % command]
+                except:
+                    s.sendall('302 function does not exist\n')
+                    continue
+                try:
+                    try:
+                        self.commandlock.acquire_lock() # this lock is per playlist plugin instance
+                        res = function.__call__(self, parms)
+                    finally: self.commandlock.release_lock()
+                except Exception, e:
+                    s.sendall('303 function error: %s\n' % repr(type(e)))
+                    continue
+                s.sendall('200 result: %s\n' % repr(res))
+        except Exception, e:
+            print "Error: exception occured: %s" % repr(e)
+            try: s.sendall('100 terminating: %s\n' % repr(type(e)))
+            except: pass
+            try: s.close()
+            except: pass
+            print 'done.'
+
+class ConnectionLimitExceeded(threading.Thread):
+    def __init__(self, socket, address):
+        threading.Thread.__init__(self)
+        self.s = socket
+        self.a = address
+    def run(self):
+        self.s.settimeout(MAX_TIMEOUT)
+        try: self.s.sendall('301 Connection limit from this IP exceeded\n')
+        except Exception, e: print 'ConnectionLimitExceeded: %s' % repr(e)
+        try: self.s.close()
+        except Exception, e: print 'ConnectionLimitExceeded: %s' % repr(e)
+
+class SockListener(threading.Thread):
+    def __init__(self, address, irc, plugin):
+        threading.Thread.__init__(self)
+        self.address = address
+        self.irc = irc
+        self.plugin = plugin
+        self.stop = False
+        self.commandlock = threading.Lock()
+        self.listeners = weakref.WeakValueDictionary()
+    def __del__(self):
+        print 'Connection handler for %s died.\n' % (self.address)
+    def stop(self):
+        self.stop = True
+        try: self.s.close()
+        except: pass
+        for handler in self.listeners:
+            print "Stopping %s" % repr(handler)
+            self.listeners[handler].stop()
+    def run(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s = s
+        while True:
+            try: s.bind(self.address)
+            except:
+                print "Error: cannot bind to %s" % repr(self.address)
+                sleep(60)
+                continue
+            s.listen(2) # backlog: 2 entries
+            print "Listening on %s" % repr(self.address)
+            while not self.stop:
+                try: cs, a = s.accept()
+                except: continue
+                if a[0] in self.listeners:
+                    print '%s is in self.listeners' % repr(a[0])
+                    ConnectionLimitExceeded(cs, a).start()
+                    continue
+                print "Accepted connection from %s" % repr(a)
+                handler = SockHandler(cs, a, self.irc, self.plugin, self.commandlock)
+                handler.setDaemon(True)
+                self.listeners[a[0]] = handler
+                handler.start()
+                handler = None # so that garbage collection works properly -- we depend on that!
+
 
 class Playlist(callbacks.Plugin):
     """HC's  Radio playlist plugin"""
@@ -68,6 +220,9 @@ class Playlist(callbacks.Plugin):
         self.__parent.__init__(irc)
         self.flusher = self.flush
         self.irc = irc
+        self.sl = SockListener(('0.0.0.0', 1723), irc, self)
+        self.sl.setDaemon(True)
+        self.sl.start()
         world.flushers.append(self.flusher)
         try: self.LoadSettings()
         except Exception, e:
@@ -75,6 +230,8 @@ class Playlist(callbacks.Plugin):
             self.saved = False
 
     def die(self):
+        try: self.sl.stop()
+        except Exception, e: print 'Stopping SockListener: %s' % e
         world.flushers = [x for x in world.flushers if x is not self.flusher]
 
     def Checkpriv(self, irc, msg, channel):
