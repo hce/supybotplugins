@@ -78,11 +78,17 @@ class Playlist(callbacks.Plugin):
         world.flushers = [x for x in world.flushers if x is not self.flusher]
 
     def Checkpriv(self, irc, msg, channel):
+        isOK = True
+        if not self.CheckRightChannel(irc, channel):
+            isOK = False
         if channel not in irc.state.channels:
-            irc.error("No")
+            irc.error("No.")
             return False
         if msg.nick not in irc.state.channels[channel].ops:
-            irc.error("You can't do that thing, when you don't have that swing. (%s)" % msg.nick)
+            if isOK:
+                irc.error("You can't do that thing, when you don't have that swing. (You're not channel operator)")
+            else:
+                irc.error("In addition to that, you don't have that swing, that you need to do that thing (You're not channel operator)")
             return False
         return True
 
@@ -90,6 +96,18 @@ class Playlist(callbacks.Plugin):
         dataDir = conf.supybot.directories.data.dirize(self.name())
         if not os.path.exists(dataDir): os.makedirs(dataDir)
         return dataDir
+
+    def CheckRightChannel(self, irc, channel):
+        if channel != '#c-radar-intern':
+            for line in """This command may only be issued in #c-radar-intern.
+If you want to issue this command in a private query with the bot,
+you may do so, as long as:
+  a) you specify #c-radar-intern as first parameter to the command
+  b) you are in the channel #c-radar-intern and
+  c) you are chanop of #c-radar-intern.
+If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.error(line)
+            return False
+        return True
 
     def SaveSettings(self):
         if self.saved: return
