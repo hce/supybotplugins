@@ -600,6 +600,16 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         #irc.reply(irc.state.channels[channel].topic)
     help = wrap(help, [additional('text')])
 
+    def version(self, irc, msg, args, text):
+        """NO ARGS
+
+            Version is $Id$"""
+        irc.reply("Version is $Id$")
+        #irc.reply(irc.state.channels[channel].topic)
+    version = wrap(version, [additional('text')])
+
+
+
 Class = Playlist
 
 
