@@ -68,9 +68,12 @@ class KWClient(threading.Thread):
         while not self.dostop:
             sleep(self.PINGINTERVAL / 2)
             if (time() - self.lastcmd) > self.PINGINTERVAL :
+                code = -1
                 try:
-                    self.sendcmd('ping\n')
+                    code, msg = self.sendcmd('ping\n')
                 except: pass
+                if code != 200:
+                    print 'Error: ping failed: %s' % msg
     def sendcmd(self, cmd):
         res = self.send(cmd)
         if res == None:
@@ -95,6 +98,10 @@ class KWClient(threading.Thread):
         return msg
     def getops(self):
         code, msg = self.sendcmd('getops\n')
+        if code != 200: raise WunderlichException("Unable to get opped users")
+        return msg.split(" ")
+    def getusers(self):
+        code, msg = self.sendcmd('getusers\n')
         if code != 200: raise WunderlichException("Unable to get opped users")
         return msg.split(" ")
 

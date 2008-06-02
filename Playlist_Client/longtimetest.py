@@ -12,9 +12,10 @@ print 'running long-time test...'
 
 c = kwunderlich.KWClient((HOST, PORT), AUTHPASSWORD)
 
-class ChanOp:
+class ChanUser:
     def __init__(self, nick):
         self.nick = nick
+class ChanOp(ChanUser): pass
 
 def MakeSpace(cl, len):
     if cl >= len: return ''
@@ -22,6 +23,7 @@ def MakeSpace(cl, len):
 
 curtopic = ''
 ops = {}
+users = {}
 while True:
     topic = c.gettopic()
     if topic != curtopic:
@@ -42,6 +44,19 @@ while True:
             print ' * %s %sis no longer a channel operator' % (op, space)
             delops.append(op)
     for op in delops: ops[op] = ChanOp(op)
+    newusers = c.getusers()
+    addusers = []
+    for user in newusers:
+        if user not in users:
+            space = MakeSpace(len(user), 17)
+            print ' * %s %sjoined #c-radar' % (user, space)
+            addusers.append(user)
+    for user in addusers: users[user] = ChanUser(user)
+    for user in users:
+        if user not in newusers:
+            space = MakeSpace(len(user), 17)
+            print ' * %s %sleft #c-radar' % (user, space)
+            del users[user]
     print '---MARK---'
     try: sleep(120)
     except KeyboardException, e: sys.exit(0) 
