@@ -52,6 +52,12 @@ MAX_TIMEOUT = 60
 
 class EOFException(Exception): pass
 
+def ParseParam(ptp):
+    if ptp.startswith('_B64_'):
+        try: return ptp.decode('base64')
+        except: return ptp
+    else: return ptp
+
 class LineReader:
     buf = ''
     def __init__(self, socket):
@@ -138,7 +144,7 @@ class SockHandler(threading.Thread):
                 command = line[0]
                 if len(line) > 1:
                     parms = line[1].split(',')
-                    parms = [i.strip() for i in parms]
+                    parms = [ParseParam(i) for i in parms]
                 else: parms = []
                 try: function = functions['FCT_%s' % command]
                 except:
