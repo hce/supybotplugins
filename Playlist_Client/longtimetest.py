@@ -28,16 +28,20 @@ while True:
         print 'Topic changed to: %s' % topic
         curtopic = topic
     newops = c.getops()
+    addops = []
     for op in newops:
         if op not in ops:
             space = MakeSpace(len(op), 17)
             print ' * %s %sis now a channel operator' % (op, space)
-            ops[op] = ChanOp(op)
+            addops.append(op)
+    for op in addops: ops[op] = ChanOp(op)
+    delops = []
     for op in ops:
         if op not in newops:
             space = MakeSpace(len(op), 17)
             print ' * %s %sis no longer a channel operator' % (op, space)
-            del ops[op]
+            delops.append(op)
+    for op in delops: ops[op] = ChanOp(op)
     print '---MARK---'
     try: sleep(120)
     except KeyboardException, e: sys.exit(0) 
