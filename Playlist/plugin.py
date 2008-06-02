@@ -119,7 +119,8 @@ class SockHandler(threading.Thread):
         if len(parms) < 1:
             self.s.sendall('340 auth CRESPONSE\n')
             return
-        hcode = sha('%s%s%s' % (self.authinfo[1], self.authinfo[0], self.AUTHPASSWORD)).hexdigest()
+        SHA_plaintext = '%s%s%s' % (self.authinfo[1], self.authinfo[0], self.AUTHPASSWORD)
+        hcode = sha(SHA_plaintext).hexdigest()
         if hcode != parms[0]:
             self.s.sendall('109 invalid auth\n')
             return
@@ -306,7 +307,7 @@ class Playlist(callbacks.Plugin):
         self.__parent.__init__(irc)
         self.flusher = self.flush
         self.irc = irc
-        self.sl = SockListener(('0.0.0.0', 1723), irc, self)
+        self.sl = SockListener(('0.0.0.0', 1724), irc, self)
         self.sl.setDaemon(True)
         self.sl.start()
         world.flushers.append(self.flusher)
