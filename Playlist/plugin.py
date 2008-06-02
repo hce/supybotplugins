@@ -46,6 +46,8 @@ from pprint import pformat
 import os
 import sys
 import weakref
+import random
+from sha import sha
 
 MAX_TIMEOUT = 60
 
@@ -53,13 +55,15 @@ MAX_TIMEOUT = 60
 class EOFException(Exception): pass
 
 def ParseParam(ptp):
-    if ptp.startswith('_B64_'):
-        try: return ptp.decode('base64')
+    B64MARKER = '_B64_'
+    if ptp.startswith(B64MARKER):
+        try: return ptp[len(B64MARKER):].decode('base64')
         except: return ptp
     else: return ptp
 
 class LineReader:
     buf = ''
+    CANCELAT = 8192 # max line length
     def __init__(self, socket):
         self.s = socket
     def readline(self):
@@ -68,6 +72,11 @@ class LineReader:
             if pos != -1:
                 line, self.buf = self.buf[:pos], self.buf[pos + 1:]
                 return line
+            if len(self.buf) > self.CANCELAT:
+                # cause a panic
+                try: self.s.close()
+                except: pass
+                return ''
             frag = self.s.recv(8192)
             if frag == None: raise EOFException()
             if len(frag) == 0: raise EOFException()
@@ -78,6 +87,7 @@ class LineReader:
             self.buf = self.buf + frag
 
 class SockHandler(threading.Thread):
+    AUTHPASSWORD = 'REGSsg!9#(@fooBPAssfuckingPhraseChangeThisSoon'
     def __init__(self, socket, address, irc, plugin, commandlock):
         threading.Thread.__init__(self)
         self.s = socket
@@ -85,8 +95,40 @@ class SockHandler(threading.Thread):
         self.irc = irc
         self.plugin = plugin
         self.commandlock = commandlock
+        self.authinfo = None
+        self.authed = False
         self.dostop = False
+    def FCT_getauth(self, parms):
+        if self.authinfo != None:
+            self.s.sendall('201 auth already sent\n')
+            return
+        if len(parms) < 1:
+            self.s.sendall('340 getauth NONCE\n')
+            return
+        nonce = parms[0]
+        if len(nonce) < 8:
+            self.s.sendall('341 nonce too short\n')
+            return
+        authcode = sha('%d' % random.randrange(1 << 31)).hexdigest()
+        self.authinfo = (authcode, nonce)
+        self.s.sendall('200 %s\n' % authcode)
+    def FCT_auth(self, parms):
+        if self.authinfo == None:
+            self.s.sendall('503 getauth first\n')
+            return
+        if len(parms) < 1:
+            self.s.sendall('340 auth CRESPONSE\n')
+            return
+        hcode = sha('%s%s%s' % (self.authinfo[1], self.authinfo[0], self.AUTHPASSWORD)).hexdigest()
+        if hcode != parms[0]:
+            self.s.sendall('109 invalid auth\n')
+            return
+        self.s.sendall('200 authenticated\n')
+        self.authed = True
     def FCT_activate(self, parms):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
         try: [album, title] = parms
         except:
             self.s.sendall('340 add ALBUM, TITLE\n')
@@ -95,12 +137,18 @@ class SockHandler(threading.Thread):
         self.plugin.DoActivate()
         self.s.sendall("200 track queued\n")
     def FCT_finish(self, params):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
         if self.plugin.playing == None:
             self.s.sendall('201 no track playing ATM\n')
             return
         self.plugin.DoFinish()
         self.s.sendall('200 track is finished\n')
     def FCT_settopic(self, params):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
         t_un = ''
         if len(params) < 1:
             tmsg = topic(self.plugin.sendChannel, ' ')
@@ -111,8 +159,14 @@ class SockHandler(threading.Thread):
         self.plugin.irc.queueMsg(tmsg)
         self.s.sendall('200 topic %sset\n' % t_un)
     def FCT_show(self, params):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
         pass
     def FCT_clear(self, params):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
         pass
     def FCT_quit(self, parms):
         self.s.sendall('400 Auf Wiedersehen!\n')
@@ -189,20 +243,20 @@ class SockListener(threading.Thread):
         self.listeners = weakref.WeakValueDictionary()
     def __del__(self):
         print 'Connection handler for %s died.\n' % (self.address)
+        for handler in self.listeners:
+            print "SockListener: Stopping %s" % repr(handler)
+            self.listeners[handler].stop()
     def stop(self):
         self.dostop = True
         try: self.s.close()
         except: pass
-        for handler in self.listeners:
-            print "Stopping %s" % repr(handler)
-            self.listeners[handler].stop()
     def run(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s = s
         while not self.dostop:
             try: s.bind(self.address)
             except:
-                print "Error: cannot bind to %s" % repr(self.address)
+                print "SockListener: Error: cannot bind to %s" % repr(self.address)
                 sleep(60)
                 continue
             s.listen(2) # backlog: 2 entries
@@ -211,16 +265,18 @@ class SockListener(threading.Thread):
                 try: cs, a = s.accept()
                 except: continue
                 if a[0] in self.listeners:
-                    print '%s is in self.listeners' % repr(a[0])
+                    print 'SockListener: %s is in self.listeners' % repr(a[0])
                     ConnectionLimitExceeded(cs, a).start()
                     continue
-                print "Accepted connection from %s" % repr(a)
+                print "SockListener: Accepted connection from %s" % repr(a)
                 handler = SockHandler(cs, a, self.irc, self.plugin, self.commandlock)
                 handler.setDaemon(True)
                 self.listeners[a[0]] = handler
                 handler.start()
                 handler = None # so that garbage collection works properly -- we depend on that!
-        try: s.close()
+        try:
+            s.close()
+            print 'SockListener: Main socket successfully closed'
         except: pass
         s = None
 
