@@ -61,4 +61,4 @@ while True:
     for user in delusers: del users[user]
     print '---MARK---'
     try: sleep(120)
-    except KeyboardException, e: sys.exit(0) 
+    except KeyboardInterrupt, e: sys.exit(0) 
