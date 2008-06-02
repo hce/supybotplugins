@@ -90,7 +90,6 @@ class KWClient(threading.Thread):
         return False
     def gettopic(self):
         code, msg = self.sendcmd('gettopic\n')
-        print code, msg
         if code != 200: raise WunderlichException("Could not get topic")
         return msg
     def getops(self):
@@ -98,24 +97,3 @@ class KWClient(threading.Thread):
         if code != 200: raise WunderlichException("Unable to get opped users")
         return msg.split(" ")
 
-
-if __name__ == '__main__':
-    AUTHPASSWORD = 'REGSsg!9#(@fooBPAssfuckingPhraseChangeThisSoon'
-    c = KWClient(('localhost', 1723), AUTHPASSWORD)
-    oldtopic = c.gettopic()
-    print "preserving topic %s" % oldtopic
-    succ = c.settopic("Der hc is mal wieder am Testen...")
-    print succ
-    sleep(2)
-    succ = c.activate("Accept", "Lady Lou")
-    print succ
-    sleep(5)
-    succ = c.finish()
-    print succ
-    sleep(2)
-    succ = c.finish()
-    print succ
-    for op in c.getops():
-        print "%s is a chanop in #c-radar-intern" % op
-    c.settopic(oldtopic)
-    c.stop()
