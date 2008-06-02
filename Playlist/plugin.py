@@ -84,8 +84,30 @@ class SockHandler(threading.Thread):
         try: [album, title] = parms
         except:
             self.s.sendall('340 add ALBUM, TITLE\n')
-            return False
-        self.playing = {"album": album, "title": title}
+            return
+        self.plugin.playing = {"album": album, "title": title}
+        self.plugin.DoActivate()
+        self.s.sendall("200 track queued\n")
+    def FCT_finish(self, params):
+        if self.plugin.playing == None:
+            self.s.sendall('201 no track playing ATM\n')
+            return
+        self.plugin.DoFinish()
+        self.s.sendall('200 track is finished\n')
+    def FCT_settopic(self, params):
+        t_un = ''
+        if len(params) < 1:
+            tmsg = topic(self.plugin.sendChannel, ' ')
+            t_un = 'un'
+        else:
+            mytopic = " | ".join(params)
+            tmsg = topic(self.plugin.sendChannel, mytopic)
+        self.plugin.irc.queueMsg(tmsg)
+        self.s.sendall('200 topic %sset\n' % t_un)
+    def FCT_show(self, params):
+        pass
+    def FCT_clear(self, params):
+        pass
     def FCT_quit(self, parms):
         self.s.sendall('400 Auf Wiedersehen!\n')
         self.dostop = True
@@ -130,7 +152,6 @@ class SockHandler(threading.Thread):
                 except Exception, e:
                     s.sendall('303 function error: %s\n' % repr(type(e)))
                     continue
-                s.sendall('200 result: %s\n' % repr(res))
         except Exception, e:
             print "Error: exception occured: %s" % repr(e)
             try: s.sendall('100 terminating: %s\n' % repr(type(e)))
@@ -172,7 +193,7 @@ class SockListener(threading.Thread):
     def run(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s = s
-        while True:
+        while not self.dostop:
             try: s.bind(self.address)
             except:
                 print "Error: cannot bind to %s" % repr(self.address)
@@ -193,6 +214,9 @@ class SockListener(threading.Thread):
                 self.listeners[a[0]] = handler
                 handler.start()
                 handler = None # so that garbage collection works properly -- we depend on that!
+        try: s.close()
+        except: pass
+        s = None
 
 
 class Playlist(callbacks.Plugin):
@@ -493,6 +517,7 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
 
         self.playing = {"album": album, "title": title}
         self.DoActivate()
+        irc.replySuccess()
     activate = wrap(activate, ['channel', additional('nonNegativeInt', 0)])
 
     def DoActivate(self):
@@ -511,8 +536,6 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         tmsg = topic(self.sendChannel, mts)
         irc.queueMsg(tmsg)
 
-        irc.replySuccess()
-
     def finished(self, irc, msg, args, channel):
         """[<channel>]
 
@@ -522,18 +545,19 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         if self.playing == None:
             irc.error("No song is playing right now")
             return
-        self.LogMessage(irc, "S", self.playing)
-        self.playing = None
+        self.DoFinish()
+        irc.replySuccess()
+    finished = wrap(finished, ['channel'])
 
-        mts = irc.state.channels[self.sendChannel].topic
+    def DoFinish(self):
+        self.playing = None
+        self.LogMessage(self.irc, "S", self.playing)
+        mts = self.irc.state.channels[self.sendChannel].topic
         pos = mts.find(self.sendMsg)
         if pos != -1:
             mts = mts[0:pos]
             tmsg = topic(self.sendChannel, mts)
-            irc.queueMsg(tmsg)
-
-        irc.replySuccess()
-    finished = wrap(finished, ['channel'])
+            self.irc.queueMsg(tmsg)
 
     def clear(self, irc, msg, args, channel):
         """[<channel>]
