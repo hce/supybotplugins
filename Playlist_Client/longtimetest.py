@@ -43,7 +43,7 @@ while True:
             space = MakeSpace(len(op), 17)
             print ' * %s %sis no longer a channel operator' % (op, space)
             delops.append(op)
-    for op in delops: ops[op] = ChanOp(op)
+    for op in delops: del ops[op]
     newusers = c.getusers()
     addusers = []
     for user in newusers:
@@ -52,11 +52,13 @@ while True:
             print ' * %s %sjoined #c-radar' % (user, space)
             addusers.append(user)
     for user in addusers: users[user] = ChanUser(user)
+    delusers = []
     for user in users:
         if user not in newusers:
             space = MakeSpace(len(user), 17)
             print ' * %s %sleft #c-radar' % (user, space)
-            del users[user]
+            delusers.append(user)
+    for user in delusers: del users[user]
     print '---MARK---'
     try: sleep(120)
     except KeyboardException, e: sys.exit(0) 
