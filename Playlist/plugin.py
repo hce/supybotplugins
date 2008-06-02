@@ -79,20 +79,20 @@ class SockHandler(threading.Thread):
         self.irc = irc
         self.plugin = plugin
         self.commandlock = commandlock
-        self.stop = False
-    def FCT_add(self, parms):
+        self.dostop = False
+    def FCT_activate(self, parms):
         try: [album, title] = parms
         except:
             self.s.sendall('340 add ALBUM, TITLE\n')
             return False
-        print 'added %s by %s' % (title, album) 
+        self.playing = {"album": album, "title": title}
     def FCT_quit(self, parms):
         self.s.sendall('400 Auf Wiedersehen!\n')
-        self.stop = True
+        self.dostop = True
         try: self.s.close()
         except: pass
     def stop():
-        self.stop = True
+        self.dostop = True
         try: self.s.close()
         except: pass
     def run(self):
@@ -101,10 +101,10 @@ class SockHandler(threading.Thread):
         lr = LineReader(s)
         functions = self.__class__.__dict__
         try:
-            while not self.stop:
+            while not self.dostop:
                 try: line = lr.readline()
                 except socket.timeout:
-                    self.stop = True
+                    self.dostop = True
                     try: self.s.sendall('100 timeout\n')
                     except: pass
                     try: self.s.close()
@@ -157,13 +157,13 @@ class SockListener(threading.Thread):
         self.address = address
         self.irc = irc
         self.plugin = plugin
-        self.stop = False
+        self.dostop = False
         self.commandlock = threading.Lock()
         self.listeners = weakref.WeakValueDictionary()
     def __del__(self):
         print 'Connection handler for %s died.\n' % (self.address)
     def stop(self):
-        self.stop = True
+        self.dostop = True
         try: self.s.close()
         except: pass
         for handler in self.listeners:
@@ -180,7 +180,7 @@ class SockListener(threading.Thread):
                 continue
             s.listen(2) # backlog: 2 entries
             print "Listening on %s" % repr(self.address)
-            while not self.stop:
+            while not self.dostop:
                 try: cs, a = s.accept()
                 except: continue
                 if a[0] in self.listeners:
@@ -492,6 +492,11 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
             return
 
         self.playing = {"album": album, "title": title}
+        self.DoActivate()
+    activate = wrap(activate, ['channel', additional('nonNegativeInt', 0)])
+
+    def DoActivate(self):
+        irc = self.irc
         self.LogMessage(irc, "M", self.playing)
 
         #mts = self.sendMsg % (title, album)
@@ -507,7 +512,6 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         irc.queueMsg(tmsg)
 
         irc.replySuccess()
-    activate = wrap(activate, ['channel', additional('nonNegativeInt', 0)])
 
     def finished(self, irc, msg, args, channel):
         """[<channel>]
