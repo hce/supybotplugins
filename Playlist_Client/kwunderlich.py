@@ -68,7 +68,8 @@ class KWClient(threading.Thread):
         while not self.dostop:
             sleep(self.PINGINTERVAL / 2)
             if (time() - self.lastcmd) > self.PINGINTERVAL :
-                try: self.send('ping\n')
+                try:
+                    self.sendcmd('ping\n')
                 except: pass
     def sendcmd(self, cmd):
         res = self.send(cmd)
