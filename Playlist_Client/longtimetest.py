@@ -30,7 +30,7 @@ while True:
     newops = c.getops()
     for op in newops:
         if op not in ops:
-            space = MakeSpace(len(op), 17) + 1)
+            space = MakeSpace(len(op), 17)
             print ' * %s %sis now a channel operator' % (op, space)
             ops[op] = ChanOp(op)
     for op in ops:
