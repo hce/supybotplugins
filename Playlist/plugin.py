@@ -147,6 +147,11 @@ class SockHandler(threading.Thread):
             self.s.sendall('503 auth first\n')
             return
         self.s.sendall('200 %s\n' % " ".join(self.irc.state.channels[self.plugin.sendChannel].ops))
+    def FCT_getusers(self, params):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
+        self.s.sendall('200 %s\n' % " ".join(self.irc.state.channels[self.plugin.sendChannel].users))
     def FCT_finish(self, params):
         if not self.authed:
             self.s.sendall('503 auth first\n')
@@ -156,6 +161,8 @@ class SockHandler(threading.Thread):
             return
         self.plugin.DoFinish()
         self.s.sendall('200 track is finished\n')
+    def FCT_ping(self, params):
+        self.s.sendall('200 pong\n')
     def FCT_settopic(self, params):
         if not self.authed:
             self.s.sendall('503 auth first\n')
