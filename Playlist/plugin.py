@@ -137,6 +137,16 @@ class SockHandler(threading.Thread):
         self.plugin.playing = {"album": album, "title": title}
         self.plugin.DoActivate()
         self.s.sendall("200 track queued\n")
+    def FCT_gettopic(self, params):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
+        self.s.sendall('200 %s\n' % self.irc.state.channels[self.plugin.sendChannel].topic)
+    def FCT_getops(self, params):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
+        self.s.sendall('200 %s\n' % " ".join(self.irc.state.channels[self.plugin.sendChannel].ops))
     def FCT_finish(self, params):
         if not self.authed:
             self.s.sendall('503 auth first\n')
@@ -307,7 +317,7 @@ class Playlist(callbacks.Plugin):
         self.__parent.__init__(irc)
         self.flusher = self.flush
         self.irc = irc
-        self.sl = SockListener(('0.0.0.0', 1724), irc, self)
+        self.sl = SockListener(('0.0.0.0', 1723), irc, self)
         self.sl.setDaemon(True)
         self.sl.start()
         world.flushers.append(self.flusher)
