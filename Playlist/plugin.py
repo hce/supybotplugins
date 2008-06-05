@@ -434,7 +434,7 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
 
     def SetTopic(self, topicToSet):
         if self.irc.state.channels[self.sendChannel].topic != topicToSet:
-            tmsg = topic(self.sendChannel, mts)
+            tmsg = topic(self.sendChannel, topicToSet)
             self.irc.queueMsg(tmsg)
             self.topicAnnounced = True
 
