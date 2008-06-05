@@ -176,6 +176,14 @@ class SockHandler(threading.Thread):
             tmsg = topic(self.plugin.sendChannel, mytopic)
         self.plugin.irc.queueMsg(tmsg)
         self.s.sendall('200 topic %sset\n' % t_un)
+    def FCT_say(self, params):
+        if not self.authed:
+            self.s.sendall('503 auth first\n')
+            return
+        mymsg = ('[%s] ' % self.address[0]) + (' '.join(params))
+        tmsg = privmsg(self.plugin.sendChannel, mymsg)
+        self.plugin.irc.queueMsg(tmsg)
+        self.s.sendall('200 privmsg sent\n')
     def FCT_show(self, params):
         if not self.authed:
             self.s.sendall('503 auth first\n')
@@ -424,6 +432,12 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         doa = doa + (3600 * 4) # advance four hours
         return doa
 
+    def SetTopic(self, topicToSet):
+        if self.irc.state.channels[self.plugin.sendChannel].topic != topicToSet:
+            tmsg = topic(self.sendChannel, mts)
+            self.irc.queueMsg(tmsg)
+            self.topicAnnounced = True
+
     def DoAnnouncements(self, curTime):
         nextDay = curTime + (3600 * 24)
         firstFr = self.Date_FFIM(curTime)
@@ -438,18 +452,13 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
                 n_firstFr = self.Date_FFIM(curTime + 3600 * 24 * 3)
                 showDate = ctime(mktime(n_firstFr) - 3600)
                 mts = self.msgSeparator.join(["Next show: %s (%s)" % (self.nextSendung, showDate)] + self.miscStuff)
-                tmsg = topic(self.sendChannel, mts)
-                self.irc.queueMsg(tmsg)
-                self.topicAnnounced = True
+                self.SetTopic(mts)
         elif (fTime <= curTime) and (curTime <= nextDay):
             if not self.feedbackAnnounced:
                 n_firstFr = self.Date_FFIM(curTime + 3600 * 24 * 3)
                 showDate = ctime(mktime(n_firstFr) - 3600)
                 mts = self.msgSeparator.join([self.feedbackMsg, "Next show %s" % showDate] + self.miscStuff)
-                tmsg = topic(self.sendChannel, mts)
-                self.irc.queueMsg(tmsg)
-                self.feedbackAnnounced = True
-                self.topicAnnounced = False
+                self.SetTopic(mts)
         else:
             self.feedbackAnnounced = False
             self.topicAnnounced = False
