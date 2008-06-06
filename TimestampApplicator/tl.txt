@@ -1,0 +1,22 @@
+E 1212696360 'logfile created'
+M 1212696360 {'album': 'gcsu.edu', 'title': 'einpegeln'}
+M 1212700131 {'album': '', 'title': 'warteschleife'}
+M 1212700394 {'album': 'The Grailknights', 'title': 'Moonlit Masquerade'}
+M 1212700844 {'album': 'ManOwaR', 'title': 'Metal Daze'}
+M 1212702524 {'album': 'Grave Digger', 'title': 'Yesterday'}
+M 1212702824 {'album': 'Accept', 'title': 'Neon Nights'}
+M 1212703184 {'album': '', 'title': 'Klaus Wunderlich - Hammond Pops 6'}
+M 1212703439 {'album': '', 'title': 'Klaus Wunderlich - Waterloo'}
+M 1212704571 {'album': 'Iron Maiden', 'title': 'Paschendale'}
+M 1212705074 {'album': 'Children of Bodom', 'title': 'Hatebreeder'}
+M 1212705958 {'album': 'Children of Bodom', 'title': 'Queen of the Night theme'}
+M 1212705993 {'album': 'W.A.Mozart - E.Schikaneder', 'title': 'Der Hoelle Rache'}
+M 1212707088 {'album': 'Shangri-Las', 'title': 'Twisted Sister ,Leader of the Pack'}
+M 1212707313 {'album': 'Savatage', 'title': 'Chance'}
+M 1212707797 {'album': 'Therion', 'title': 'Feuer Overture'}
+M 1212709206 {'album': 'Dream Evil', 'title': 'Only for the night'}
+M 1212709462 {'album': 'As I Lay Dying', 'title': 'Nothing Left'}
+M 1212709684 {'album': 'Alexisonfire', 'title': 'Boiled Frogs'}
+M 1212709915 {'album': 'Subway To Sally', 'title': 'Saraband De Noir'}
+M 1212709968 {'album': 'Subway To Sally', 'title': 'Schneekoenigin'}
+E 1212712938 'logfile closed'
