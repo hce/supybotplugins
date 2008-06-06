@@ -92,6 +92,11 @@ class KWClient(threading.Thread):
         code, msg = self.sendcmd('settopic _B64_%s\n' % topic.encode('base64').replace("\n", ""))
         if code == 200: return True
         return False
+    def say(self, topic):
+        code, msg = self.sendcmd('say _B64_%s\n' % topic.encode('base64').replace("\n", ""))
+        print msg
+        if code == 200: return True
+        return False
     def gettopic(self):
         code, msg = self.sendcmd('gettopic\n')
         if code != 200: raise WunderlichException("Could not get topic")
