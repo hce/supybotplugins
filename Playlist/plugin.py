@@ -371,6 +371,7 @@ class ScheduledAnnouncer(threading.Thread):
 
 class Playlist(callbacks.Plugin):
     """HC's  Radio playlist plugin"""
+    threaded = True
 
     def __init__(self, irc):
         self.__parent = super(Playlist, self)
