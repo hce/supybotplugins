@@ -311,6 +311,63 @@ class SockListener(threading.Thread):
         except: pass
         s = None
 
+class ScheduledAnnouncer(threading.Thread):
+    SLEEP_TIME = 60
+
+    def __init__(self, channel, irc):
+        threading.Thread.__init__(self)
+        self.channel = channel
+        self.irc = irc
+        self.messages = []
+        self.lock = threading.Lock()
+    def run(self):
+        while True:
+            sleep(self.SLEEP_TIME)
+            try:
+                self.lock.acquire_lock()
+                try: message = self.messages[0]
+                except: continue
+                try: atime, msg = message
+                except:
+                    print "Fatal error! Here's something terribly wrong. Dumping"
+                    print "the structure..."
+                    print repr(self.messages)
+                    print "===== self.messages = [] ====="
+                    self.messages = []
+                    continue
+                if atime < time():
+                    tmsg = topic(self.channel, msg)
+                    self.irc.queueMsg(tmsg)
+                    del self.messages[0]
+            finally: self.lock.release_lock()
+    def additem(self, atime, message):
+        try:
+            self.lock.acquire_lock()
+            self.messages.append((atime, message))
+            self.messages.sort()
+        finally: self.lock.release_lock()
+    def remove(self, mid):
+        try:
+            self.lock.acquire_lock()
+            del self.messages[mid]
+            self.messages.sort()
+        finally: self.lock.release_lock()
+    def clear(self):
+        try:
+            self.lock.acquire_lock()
+            self.messages = []
+        finally: self.lock.release_lock()
+    def dump(self, f):
+        try:
+            self.lock.acquire_lock()
+            dump(self.messages, f)
+        finally: self.lock.release_lock()
+    def load(self, f):
+        try:
+            self.lock.acquire_lock()
+            messages = load(f)
+            self.messages = messages
+        finally: self.lock.release_lock()
 
 class Playlist(callbacks.Plugin):
     """HC's  Radio playlist plugin"""
@@ -320,14 +377,6 @@ class Playlist(callbacks.Plugin):
         self.__parent.__init__(irc)
         self.flusher = self.flush
         self.irc = irc
-        self.sl = SockListener(('0.0.0.0', 1723), irc, self)
-        self.sl.setDaemon(True)
-        self.sl.start()
-        self.numberplaying = 0
-        self.saved = True
-        self.logfile = None
-        self.playing = None
-        self.topicAnnounced = False
         # manually saved/loaded stuff
         self.sendChannel = "#c-radar"
         self.sendMsg = " | now playing: "
@@ -336,8 +385,20 @@ class Playlist(callbacks.Plugin):
         self.miscStuff = ["http://www.c-radar.de", "fm 103,4 MHz"]
         self.msgSeparator = " | "
         self.feedbackMsg = "The show is over; send your feedback to studio@c-radar.de"
+
         self.pl = []
         self.feedbackAnnounced = False
+        self.sl = SockListener(('0.0.0.0', 1723), irc, self)
+        self.sl.setDaemon(True)
+        self.sl.start()
+        self.sa = ScheduledAnnouncer(self.sendChannel, irc)
+        self.sa.setDaemon(True)
+        self.sa.start()
+        self.numberplaying = 0
+        self.saved = True
+        self.logfile = None
+        self.playing = None
+        self.topicAnnounced = False
         world.flushers.append(self.flusher)
         try: self.LoadSettings()
         except Exception, e:
@@ -392,6 +453,7 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         dump(self.miscStuff, f)
         dump(self.msgSeparator, f)
         dump(self.pl, f)
+        self.sa.dump(f)
         f.close()
         os.rename(dd + "_tmp", dd)
         self.saved = True
@@ -408,6 +470,7 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         self.miscStuff = load(f)
         self.msgSeparator = load(f)
         self.pl = load(f)
+        self.sa.load(f)
         f.close()
         self.saved = True
 
@@ -469,10 +532,6 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
     def flush(self):
         self.SaveSettings()
 
-        # hack to call that from here...
-        try: self.DoAnnouncements(time())
-        except Exception, e: sys.stderr.write("Error while announcing: %s" % e)
-
     def NewLog(self, irc):
         logDir = conf.supybot.directories.log.dirize(self.name())
         if not os.path.exists(logDir):
@@ -519,29 +578,50 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         irc.replySuccess()
     add = wrap(add, ['channel', 'text'])
 
-    def nextshow(self, irc, msg, args, channel, topic):
-        """[<channel>] <TopicOfTheNextShow>
+    def addannounce(self, irc, msg, args, text):
+        """<atime> <topic to set>
 
-        Define the topic of the next show. This will be announced
-        two days before the upcoming show."""
+        Add a new announce. Announce is set as topic no sooner
+        than atime seconds have passed since Jan 1st 1970."""
 
-        if not self.Checkpriv(irc, msg, channel): return
-        if topic == '': irc.reply("Topic of the next show is: %s" % self.nextSendung)
-        else:
-            self.nextSendung = topic
+        try: [atime, message] = text.split(" ", 1)
+        except:
+            irc.error("USAGE: addannounce <atime> <topic to set>")
+            return
+        try: atime = int(atime)
+        except:
+            irc.error("ERROR: atime must be a positive integer")
+        self.sa.additem(atime, message)
+        self.saved = False
+        irc.reply("Added announce item set for %s" % ctime(atime))
+    addannounce = wrap(addannounce, ['text'])
+
+    def showannounces(self, irc, msg, args):
+        """
+
+        Show all scheduled announces"""
+        if len(self.sa.messages) == 0:
+            irc.reply("No announces scheduled.")
+            return
+        for item in self.sa.messages:
+            atime, message = item
+            irc.reply("%s: %2d %s" % (ctime(atime), self.sa.messages.index(item), message))
+    showannounces = wrap(showannounces, [])
+
+    def delannounce(self, irc, msg, args, num):
+        try:
+            self.sa.remove(num)
             self.saved = False
-            irc.reply("Topic set. Will be announced two days before the show.")
-    nextshow = wrap(nextshow, ['channel', additional('text', '')])
+            irc.replySuccess()
+        except:
+            irc.error("Invalid ID")
+    delannounce = wrap(delannounce, ['nonNegativeInt'])
 
-    def simannounce(self, irc, msg, args, channel, curTime):
-        """[<channel>] <time in secs since jan1st1970
-
-        Debug function"""
-
-        if not self.Checkpriv(irc, msg, channel): return
-
-        self.DoAnnouncements(curTime)
-    simannounce = wrap(simannounce, ['channel', 'nonNegativeInt'])
+    def clearannounces(self, irc, msg, args):
+        self.sa.clear()
+        self.saved = False
+        irc.replySuccess()
+    clearannounces = wrap(clearannounces, [])
 
     def show(self, irc, msg, args, channel):
         """[<channel>]
