@@ -136,6 +136,7 @@ class SockHandler(threading.Thread):
             return
         self.plugin.playing = {"album": album, "title": title}
         self.plugin.DoActivate()
+        self.plugin.numberplaying = self.plugin.numberplaying + 1
         self.s.sendall("200 track queued\n")
     def FCT_gettopic(self, params):
         if not self.authed:
@@ -159,8 +160,12 @@ class SockHandler(threading.Thread):
         if self.plugin.playing == None:
             self.s.sendall('201 no track playing ATM\n')
             return
-        self.plugin.DoFinish()
-        self.s.sendall('200 track is finished\n')
+        if self.plugin.numberplaying <= 1:
+            self.plugin.DoFinish()
+            self.s.sendall('200 track is finished\n')
+        else: self.s.sendall('200 track is finished, but another is still playing (%d)\n' % self.plugin.numberplaying)
+        if self.plugin.numberplaying > 0:
+            self.plugin.numberplaying = self.plugin.numberplaying - 1
     def FCT_ping(self, params):
         self.s.sendall('200 pong\n')
     def FCT_settopic(self, params):
@@ -310,23 +315,6 @@ class SockListener(threading.Thread):
 class Playlist(callbacks.Plugin):
     """HC's  Radio playlist plugin"""
 
-    # manually saved/loaded stuff
-    sendChannel = "#c-radar"
-    sendMsg = " | now playing: "
-    titleFormat = "%(title)s from %(album)s"
-    nextSendung = "Details for the next show can be found at http://www.c-radar.de/"
-    miscStuff = ["http://www.c-radar.de", "fm 103,4 MHz"]
-    msgSeparator = " | "
-    feedbackMsg = "The show is over; send your feedback to studio@c-radar.de"
-    pl = []
-
-    # transient stuff
-    saved = True
-    logfile = None
-    playing = None
-    topicAnnounced = False
-    feedbackAnnounced = False
-
     def __init__(self, irc):
         self.__parent = super(Playlist, self)
         self.__parent.__init__(irc)
@@ -335,6 +323,21 @@ class Playlist(callbacks.Plugin):
         self.sl = SockListener(('0.0.0.0', 1723), irc, self)
         self.sl.setDaemon(True)
         self.sl.start()
+        self.numberplaying = 0
+        self.saved = True
+        self.logfile = None
+        self.playing = None
+        self.topicAnnounced = False
+        # manually saved/loaded stuff
+        self.sendChannel = "#c-radar"
+        self.sendMsg = " | now playing: "
+        self.titleFormat = "%(title)s from %(album)s"
+        self.nextSendung = "Details for the next show can be found at http://www.c-radar.de/"
+        self.miscStuff = ["http://www.c-radar.de", "fm 103,4 MHz"]
+        self.msgSeparator = " | "
+        self.feedbackMsg = "The show is over; send your feedback to studio@c-radar.de"
+        self.pl = []
+        self.feedbackAnnounced = False
         world.flushers.append(self.flusher)
         try: self.LoadSettings()
         except Exception, e:
