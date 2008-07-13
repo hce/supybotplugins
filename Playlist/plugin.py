@@ -41,7 +41,7 @@ from supybot.ircmsgs import privmsg, topic
 import threading
 import socket
 
-from time import time, localtime, mktime, ctime, sleep
+from time import time, localtime, mktime, ctime, sleep, strptime
 from pprint import pformat
 import os
 import sys
@@ -582,15 +582,18 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
         """<atime> <topic to set>
 
         Add a new announce. Announce is set as topic no sooner
-        than atime seconds have passed since Jan 1st 1970."""
+        than atime. Atime is specified in the format dd.mm.yyyy hh:mm"""
 
-        try: [atime, message] = text.split(" ", 1)
+        try: [atime1, atime2, message] = text.split(" ", 2)
         except:
             irc.error("USAGE: addannounce <atime> <topic to set>")
             return
-        try: atime = int(atime)
-        except:
-            irc.error("ERROR: atime must be a positive integer")
+        atime = ' '.join((atime1, atime2))
+        try: atime = mktime(strptime(atime, "%d.%m.%Y %H:%M"))
+        except Exception, e:
+            irc.error("ERROR: atime is in the format dd.mm.yyyy hh:mm")
+            print e
+            return
         self.sa.additem(atime, message)
         self.saved = False
         irc.reply("Added announce item set for %s" % ctime(atime))
