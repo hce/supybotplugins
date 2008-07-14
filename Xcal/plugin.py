@@ -40,7 +40,7 @@ import xcalparser
 import time as modtime
 import threading
 
-diff = modtime.time() - modtime.mktime((2007,9,14,18,55,00,0,196,1))
+diff = modtime.time() - modtime.mktime((2007,9,14,19,45,00,0,196,1))
 
 def time():
     return modtime.time() - diff
@@ -106,6 +106,8 @@ class Xcal(callbacks.Plugin):
         self.feedreader = FeedReader(self)
         self.feedreader.setDaemon(True)
         self.feedreader.start()
+    def die(self):
+        self.feedreader.stop()
 
 
 Class = Xcal
