@@ -57,9 +57,9 @@ class FeedReader(threading.Thread):
         self.REFRESH_INTERVAL = 1800 # 30 mins
         self.ANNOUNCETIME = 300 # 5 mins
         self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
-==> %(summary)s
-==> Diese Veranstaltung findet in Raum %(location)s statt.
-==> Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
+%(summary)s
+Diese Veranstaltung findet in Raum %(location)s statt.
+Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
         self.ANNOUNCECHANNEL = '#mrmcd111b-bot'
     def DoRefresh(self):
         try:
