@@ -83,8 +83,8 @@ class FeedReader(threading.Thread):
                 try: atime, event = self.events[0]
                 except: break
                 if time() > (atime - self.ANNOUNCETIME):
-                    self.plugin.irc.queueMsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
-                            modtime.asctime(modtime.localtime(time())))
+                    self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
+                            modtime.asctime(modtime.localtime(time()))))
                     amsg = self.ANNOUNCEMESSAGE % event.dict()
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
