@@ -409,6 +409,8 @@ class Playlist(callbacks.Plugin):
     def die(self):
         try: self.sl.stop()
         except Exception, e: print 'Stopping SockListener: %s' % e
+        try: self.sa.stop()
+        except Exception, e: print 'Stopping ScheduledAnnouncer: %s' % e
         world.flushers = [x for x in world.flushers if x is not self.flusher]
 
     def Checkpriv(self, irc, msg, channel):
