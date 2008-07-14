@@ -33,14 +33,44 @@ from supybot.commands import *
 import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
+from supybot.ircmsgs import privmsg, topic
 
+import xcalparser
+
+import time
 import threading
 
 class FeedReader(threading.Thread):
     def __init__(self, plugin):
         threading.Thread.__init__(self)
         self.plugin = plugin
-
+        self.events = []
+        self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
+        self.REFRESH_INTERVAL = 60 # 60 s; should be something like 1800 for production use probably...
+        self.ANNOUNCETIME = 60 # announce 60s prior to event
+        self.ANNOUNCEMESSAGE = "Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s\n==> %(summary)s <=="
+    def DoRefresh(self):
+        xcal = xcalparser.XCal(self.RSSURL)
+        newevents = [e for e in xcal.GetPostTimeEvents(time()) if e not in self.events]
+        n = len(newevents)
+        if n:
+            print 'Added %d new events.' % n
+            self.events = self.events + newevents
+    def run(self):
+        self.next_refresh = 0
+        while True:
+            time.sleep(60)
+            if time.time() > self.next_refresh:
+                self.DoRefresh()
+                self.next_refresh = time.time() + self.REFRESH_INTERFAL
+            while True:
+                try: atime, event = self.events[0]
+                except: break
+                if time.time() > (atime - self.ANNOUNCETIME):
+                    amsg = self.ANNOUNCEMESSAGE % event.dict()
+                    for aline in amsg.split("\n"):
+                        tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
+                        self.plugin.irc.queuemsg(tmsg)
 
 
 class Xcal(callbacks.Plugin):

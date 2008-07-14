@@ -38,6 +38,12 @@ class XCalEvent:
             if len(l): return l[0]
             else: return default
         else: return l
+    def dict(self):
+        d = {}
+        for k, v in self.items:
+            if len(v) > 1: v = ' und '.join(v)
+            else: v = v[0]
+            d[k] = v
     def getTime(self, key):
         rd = self.items[key][0]
         datetime = rd.split('T')
