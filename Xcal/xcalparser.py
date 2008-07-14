@@ -44,7 +44,7 @@ class XCalEvent:
             v = self.items[k]
             if len(v) > 1: v = ' und '.join(v)
             else: v = v[0]
-            d[k.encode('ascii', 'ignore')] = v.encode('ascii', 'ignore')
+            d[k] = v
         try: d['begintime'] = time.strftime('%H:%M', time.localtime(self.getTime('dtstart')))
         except: d['begintime'] = 'unknown'
         return d

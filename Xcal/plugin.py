@@ -40,7 +40,7 @@ import xcalparser
 import time as modtime
 import threading
 
-diff = modtime.time() - modtime.mktime((2007,9,14,19,45,00,0,196,1))
+diff = modtime.time() - modtime.mktime((2007,9,14,20,54,00,0,196,1))
 
 def time():
     return modtime.time() - diff
@@ -51,6 +51,7 @@ class FeedReader(threading.Thread):
         self.plugin = plugin
         self.events = []
         self.uids = []
+        self.dostop = False
         # self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
         self.RSSURL = ("www.hcesperer.org", '/temp/schedule.en.xcs')
         self.REFRESH_INTERVAL = 1800 # 30 mins
@@ -60,7 +61,7 @@ class FeedReader(threading.Thread):
 ==> Diese Veranstaltung findet in Raum %(location)s statt.
 ==> Beginn: %(begintime)s; Dauer: %(duration)s
 <== END OF DETAILS FOR THIS VERANSTALTUNG ==="""
-        self.ANNOUNCECHANNEL = '#mrmcd111b'
+        self.ANNOUNCECHANNEL = '#mrmcd111b-bot'
     def DoRefresh(self):
         try:
             xcal = xcalparser.XCal(self.RSSURL)
@@ -74,7 +75,7 @@ class FeedReader(threading.Thread):
             print 'Error: couldn\'t update: %s' % str(e)
     def run(self):
         self.next_refresh = 0
-        while True:
+        while not self.dostop:
             modtime.sleep(10)
             if time() > self.next_refresh:
                 self.DoRefresh()
@@ -92,6 +93,8 @@ class FeedReader(threading.Thread):
                     del self.events[0]
                     modtime.sleep(10)
                 else: break
+    def stop(self):
+        self.dostop = True
 
 
 class Xcal(callbacks.Plugin):
