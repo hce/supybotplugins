@@ -32,7 +32,7 @@ class XCalEvent:
     def get(self, key, default=None, firstOnly=True):
         try: l = self.items[key]
         except:
-            if fisrtOnly: return default
+            if firstOnly: return default
             else: return [default]
         if firstOnly:
             if len(l): return l[0]
@@ -91,5 +91,5 @@ class XCal:
 
 if __name__ == '__main__':
     xcal = XCal(("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs'))
-    for event in xcal.GetPostTimeEvents(time()):
-        print event[0], unicode(event[1])
+    for event in xcal.GetPostTimeEvents(0):
+        print event[0], event[1].get('summary').encode('ansi')
