@@ -37,8 +37,13 @@ from supybot.ircmsgs import privmsg, topic
 
 import xcalparser
 
-import time
+import time as modtime
 import threading
+
+diff = modtime.time() - modtime.mktime((2007,9,14,18,55,00,0,196,1))
+
+def time():
+    return modtime.time() - diff
 
 class FeedReader(threading.Thread):
     def __init__(self, plugin):
@@ -48,8 +53,8 @@ class FeedReader(threading.Thread):
         self.uids = []
         # self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
         self.RSSURL = ("www.hcesperer.org", '/temp/schedule.en.xcs')
-        self.REFRESH_INTERVAL = 60 # 60 s; should be something like 1800 for production use probably...
-        self.ANNOUNCETIME = 60 # announce 60s prior to event
+        self.REFRESH_INTERVAL = 1800 # 30 mins
+        self.ANNOUNCETIME = 300 # 5 mins
         self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
 ==> %(summary)s
 ==> Diese Veranstaltung findet in Raum %(location)s statt.
@@ -57,30 +62,35 @@ class FeedReader(threading.Thread):
 <== END OF DETAILS FOR THIS VERANSTALTUNG ==="""
         self.ANNOUNCECHANNEL = '#mrmcd111b'
     def DoRefresh(self):
-        xcal = xcalparser.XCal(self.RSSURL)
-        newevents = [e for e in xcal.GetPostTimeEvents(time.time()) if e[1].get('uid') not in self.uids]
-        for event in newevents: self.uids.append(event[1].get('uid'))
-        n = len(newevents)
-        if n:
-            print 'Added %d new event%s.' % (n, {True: '', False: 's'}[n == 1])
-            self.events = self.events + newevents
+        try:
+            xcal = xcalparser.XCal(self.RSSURL)
+            newevents = [e for e in xcal.GetPostTimeEvents(time()) if e[1].get('uid') not in self.uids]
+            for event in newevents: self.uids.append(event[1].get('uid'))
+            n = len(newevents)
+            if n:
+                print 'Added %d new event%s.' % (n, {True: '', False: 's'}[n == 1])
+                self.events = self.events + newevents
+        except Exception, e:
+            print 'Error: couldn\'t update: %s' % str(e)
     def run(self):
         self.next_refresh = 0
         while True:
-            time.sleep(10)
-            if time.time() > self.next_refresh:
+            modtime.sleep(10)
+            if time() > self.next_refresh:
                 self.DoRefresh()
-                self.next_refresh = time.time() + self.REFRESH_INTERVAL
+                self.next_refresh = time() + self.REFRESH_INTERVAL
             while True:
                 try: atime, event = self.events[0]
                 except: break
-                if time.time() > (atime - self.ANNOUNCETIME):
+                if time() > (atime - self.ANNOUNCETIME):
+                    self.plugin.irc.queueMsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
+                            modtime.asctime(modtime.localtime(time())))
                     amsg = self.ANNOUNCEMESSAGE % event.dict()
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
                         self.plugin.irc.queueMsg(tmsg)
                     del self.events[0]
-                    time.sleep(10)
+                    modtime.sleep(10)
                 else: break
 
 
