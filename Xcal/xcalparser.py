@@ -73,9 +73,13 @@ class XCal:
             starttime = xce.getTime('dtstart')
             self.events.append((starttime, xce))
         self.events.sort()
-        for time, event in self.events:
-            print '%d: %s' % (time, unicode(event))
+    def GetPostTimeEvents(self, time):
+        return [e for e in self.events if e[0] > time]
+
+        
 
 
 if __name__ == '__main__':
     xcal = XCal(("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs'))
+    for event in xcal.GetPostTimeEvents(time()):
+        print event[0], unicode(event[1])
