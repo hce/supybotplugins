@@ -1,0 +1,1469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iCalendar xmlns:xCal="urn:ietf:params:xml:ns:xcal" xmlns:pentabarf="http://pentabarf.org">
+ <vcalendar>
+  <version>2.0</version>
+  <prodid>-//Pentabarf//Schedule 0.95 rc4//EN</prodid>
+  <x-wr-caldesc>mrmcd110b Schedule Release 0.95 rc4</x-wr-caldesc>
+  <x-wr-calname>mrmcd110b Schedule</x-wr-calname>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2112@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2112</pentabarf:event-id>
+  <pentabarf:event-tag>journey_into_metasploit</pentabarf:event-tag>
+  <pentabarf:title>A journey into metasploit</pentabarf:title>
+  <pentabarf:subtitle>One tool to pwn 'em all</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T140000</dtstart>
+  <dtend>20070915T150000</dtend>
+  <duration>1H</duration>
+  <summary>A journey into metasploit - One tool to pwn 'em all</summary>
+
+  <description>This talk will be an introduction to the Metasploit framework. Easy penetration testing, security tool development and attack automation.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2112.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>codec</attendee>
+
+  <attendee>jchome</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2168@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2168</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Blinkenlights workshop</pentabarf:title>
+  <pentabarf:subtitle>Having fun with LEDs</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T180000</dtstart>
+  <dtend>20070916T000000</dtend>
+  <duration>6H</duration>
+  <summary>Blinkenlights workshop - Having fun with LEDs</summary>
+
+  <description>During this workshop participants can play with LEDs and microcontrollers.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2168.en.html</url>
+
+  <location>workshop</location>
+
+
+  <attendee>Ralf</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2096@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2096</pentabarf:event-id>
+  <pentabarf:event-tag>breaking_wep_in_less_than_60_seconds</pentabarf:event-tag>
+  <pentabarf:title>Breaking WEP in less than 60 Seconds</pentabarf:title>
+  <pentabarf:subtitle>the next level</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T220000</dtstart>
+  <dtend>20070915T230000</dtend>
+  <duration>1H</duration>
+  <summary>Breaking WEP in less than 60 Seconds - the next level</summary>
+
+  <description>WEP is the currently most used protocol for securing 802.11 networks, also called wireless lans or wlans. Recently, a new attack on WEP, the PTW attack, was discovered, which allows an attacker to recover the secret key in less than 60 seconds in some cases.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2096.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>Erik Tews</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2135@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2135</pentabarf:event-id>
+  <pentabarf:event-tag>building_a_hacker_space</pentabarf:event-tag>
+  <pentabarf:title>Building a Hacker Space</pentabarf:title>
+  <pentabarf:subtitle>A Hacker Space Design Pattern Catalogue</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T140000</dtstart>
+  <dtend>20070915T150000</dtend>
+  <duration>1H</duration>
+  <summary>Building a Hacker Space - A Hacker Space Design Pattern Catalogue</summary>
+
+  <description>With the help of Design Patterns I will show you how to set up your own Hacker Space.  The Design Patterns are based on more than 10 years of experience with setting up and running a Hacker Space.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2135.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>Lars Weiler</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2138@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2138</pentabarf:event-id>
+  <pentabarf:event-tag>cinit</pentabarf:event-tag>
+  <pentabarf:title>cinit</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T200000</dtstart>
+  <dtend>20070915T210000</dtend>
+  <duration>1H</duration>
+  <summary>cinit</summary>
+
+  <description>high speed highly parallel execution with real dependencies - that's cinit.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2138.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>telmich</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2178@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2178</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>C-RaDaR Bundestrojaner-Malwettbewerb </pentabarf:title>
+  <pentabarf:subtitle>Preisverleihung</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070914T230000</dtstart>
+  <dtend>20070914T233000</dtend>
+  <duration>0H</duration>
+  <summary>C-RaDaR Bundestrojaner-Malwettbewerb  - Preisverleihung</summary>
+
+  <description>In einer kurzen, feierlichen Zeremonie werden die Teilnehmer und Sieger des spontanen Bundestrojaner-Malwettbewerbs der C-RaDaR-Sendung vom 6. September geehrt.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2178.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>lars</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2105@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2105</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Creating a Componed Based Message System for Rapid Prototyping</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T220000</dtstart>
+  <dtend>20070915T223000</dtend>
+  <duration>0H</duration>
+  <summary>Creating a Componed Based Message System for Rapid Prototyping</summary>
+
+  <description>During the different development cycles of agame, many aspects may change, which oftenresults in changes of code. To be prepared forthis, a flexible design of the code base isrequired, otherwise major code rewritting isneeded, which cost money and hours of work.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2105.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Felix Kerger</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2101@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2101</pentabarf:event-id>
+  <pentabarf:event-tag>development_fuer_openwrt</pentabarf:event-tag>
+  <pentabarf:title>Development fuer OpenWRT</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T210000</dtstart>
+  <dtend>20070915T220000</dtend>
+  <duration>1H</duration>
+  <summary>Development fuer OpenWRT</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2101.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>Felix Fietkau</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2148@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2148</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Die internationale Piratenbewegung</pentabarf:title>
+  <pentabarf:subtitle>Ein/Über/Ausblick auf die deutsche Piratenpartei und den internationalen Verbund von Piratenparteien.</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T160000</dtstart>
+  <dtend>20070915T170000</dtend>
+  <duration>1H</duration>
+  <summary>Die internationale Piratenbewegung - Ein/Über/Ausblick auf die deutsche Piratenpartei und den internationalen Verbund von Piratenparteien.</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2148.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Jan Huwald</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2122@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2122</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>dtrace: dynamic tracing framework</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T130000</dtstart>
+  <dtend>20070915T140000</dtend>
+  <duration>1H</duration>
+  <summary>dtrace: dynamic tracing framework</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2122.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>Andreas Portele</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2159@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2159</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Einführung in Kryptographie I</pentabarf:title>
+  <pentabarf:subtitle>Kryptographie für Nicht-Kryptographen</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070914T200000</dtstart>
+  <dtend>20070914T220000</dtend>
+  <duration>2H</duration>
+  <summary>Einführung in Kryptographie I - Kryptographie für Nicht-Kryptographen</summary>
+
+  <description>Die Vortragsreihe besteht aus drei Vorträgen, die aufeinander aufbauen. Es empfiehlt sich also alle drei Vorträge zu hören. Ziel der Vortragsreihe ist, den Leuten, die sich bis jetzt noch nicht damit befasst haben, Kryptographie näher zu bringen. Leute, die sich mit symmetrischer (DES, AES, rc4) und asymmetrischer Kryptographie (RSA, ElGamal, Elliptische Kurven) schon einmal befasst haben, werden sich langweilen.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2159.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>FaUl</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2160@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2160</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Einführung in Kryptographie II</pentabarf:title>
+  <pentabarf:subtitle>Kryptographie für Nicht-Kryptographen</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T130000</dtstart>
+  <dtend>20070915T150000</dtend>
+  <duration>2H</duration>
+  <summary>Einführung in Kryptographie II - Kryptographie für Nicht-Kryptographen</summary>
+
+  <description>Die Vortragsreihe besteht aus drei Vorträgen, die aufeinander aufbauen. Es empfiehlt sich also alle drei Vorträge zu hören. Ziel der Vortragsreihe ist, den Leuten, die sich bis jetzt noch nicht damit befasst haben, Kryptographie näher zu bringen. Leute, die sich mit symmetrischer (DES, AES, rc4) und asymmetrischer Kryptographie (RSA, ElGamal, Elliptische Kurven) schon einmal befasst haben, werden sich langweilen.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2160.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>FaUl</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2161@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2161</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Einführung in Kryptographie III</pentabarf:title>
+  <pentabarf:subtitle>Kryptographie für Nicht-Kryptographen</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T170000</dtstart>
+  <dtend>20070915T190000</dtend>
+  <duration>2H</duration>
+  <summary>Einführung in Kryptographie III - Kryptographie für Nicht-Kryptographen</summary>
+
+  <description>Die Vortragsreihe besteht aus drei Vorträgen, die aufeinander aufbauen. Es empfiehlt sich also alle drei Vorträge zu hören. Ziel der Vortragsreihe ist, den Leuten, die sich bis jetzt noch nicht damit befasst haben, Kryptographie näher zu bringen. Leute, die sich mit symmetrischer (DES, AES, rc4) und asymmetrischer Kryptographie (RSA, ElGamal, Elliptische Kurven) schon einmal befasst haben, werden sich langweilen.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2161.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>FaUl</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2136@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2136</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>EOF-1</pentabarf:title>
+  <pentabarf:subtitle>Crypting your communications for fun and.. do we really need *two* causes?</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070914T200000</dtstart>
+  <dtend>20070914T210000</dtend>
+  <duration>1H</duration>
+  <summary>EOF-1 - Crypting your communications for fun and.. do we really need *two* causes?</summary>
+
+  <description>Eine Einfuehrung in EOF: Gruende, Motivation, Stand und so weiter ;-) Anschliessend Hand's on und coding!</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2136.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>telmich</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2162@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2162</pentabarf:event-id>
+  <pentabarf:event-tag>foto_fahndung</pentabarf:event-tag>
+  <pentabarf:title>Foto-Fahndung</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070916T130000</dtstart>
+  <dtend>20070916T140000</dtend>
+  <duration>1H</duration>
+  <summary>Foto-Fahndung</summary>
+
+  <description>Das BKA hat am Mainzer Hauptbahnhof erstmals die automatisierte Fahndung nach biometrischen Merkmalen getestet und ist dabei an die Grenzen der aktuellen Technik gestoßen.Ein Blick in die Ergebnisse und einige skeptische Gedanken zur generellen Realisierbarkeit des Konzepts 'Foto-Fahndung' - wie lange wird es dauern, bis die Technik so weit ist? Werden 3D-Scanner den entscheidenden Fortschritt bringen? Oder ist Foto-Fahndung generell zum Scheitern verurteilt?</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2162.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Martin Böhler</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2130@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2130</pentabarf:event-id>
+  <pentabarf:event-tag>freifunk_darmstadt</pentabarf:event-tag>
+  <pentabarf:title>Freifunk Darmstadt</pentabarf:title>
+  <pentabarf:subtitle>Auftakt zum neuen Projekt --&gt; Öffentlichkeitsarbeit</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070916T130000</dtstart>
+  <dtend>20070916T140000</dtend>
+  <duration>1H</duration>
+  <summary>Freifunk Darmstadt - Auftakt zum neuen Projekt --&gt; Öffentlichkeitsarbeit</summary>
+
+  <description>folgt</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2130.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>g0ph3r</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2145@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2145</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>gamez on the beamer</pentabarf:title>
+  <pentabarf:subtitle>event 0</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T220000</dtstart>
+  <dtend>20070916T040000</dtend>
+  <duration>6H</duration>
+  <summary>gamez on the beamer - event 0</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2145.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>g0ph3r</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2115@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2115</pentabarf:event-id>
+  <pentabarf:event-tag>getting_things_done</pentabarf:event-tag>
+  <pentabarf:title>Getting Things Done</pentabarf:title>
+  <pentabarf:subtitle>Scripting your life</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T160000</dtstart>
+  <dtend>20070915T170000</dtend>
+  <duration>1H</duration>
+  <summary>Getting Things Done - Scripting your life</summary>
+
+  <description>An introduction into improving personal productivity with tools and methodologies related to Getting Things Done by David Allen.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2115.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>Stephan Schmieder</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2113@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2113</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Goodbye and have a nice trip home</pentabarf:title>
+  <pentabarf:subtitle>The american secret Services are leaving Griesheim. A field day with a goodbye ceremony...</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T120000</dtstart>
+  <dtend>20070915T160000</dtend>
+  <duration>4H</duration>
+  <summary>Goodbye and have a nice trip home - The american secret Services are leaving Griesheim. A field day with a goodbye ceremony...</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2113.en.html</url>
+
+  <location>outdoor</location>
+
+
+  <attendee>mc.fly</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2106@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2106</pentabarf:event-id>
+  <pentabarf:event-tag>keysigning</pentabarf:event-tag>
+  <pentabarf:title>GPG / CACert Keysigning Samstag</pentabarf:title>
+  <pentabarf:subtitle>GPG und CaCert signierungen</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T120000</dtstart>
+  <dtend>20070915T130000</dtend>
+  <duration>1H</duration>
+  <summary>GPG / CACert Keysigning Samstag - GPG und CaCert signierungen</summary>
+
+  <description>GPG Keysigninig Party</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2106.en.html</url>
+
+  <location>workshop</location>
+
+
+  <attendee>g0ph3r</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2098@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2098</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Hacking Biometric Systems</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T210000</dtstart>
+  <dtend>20070915T220000</dtend>
+  <duration>1H</duration>
+  <summary>Hacking Biometric Systems</summary>
+
+  <description>Today biometric systems are becoming mainstream. They can be found everywhere - in mobile phones, computers, ATMs even in passports. Apart from facial recognition systems and barely used systems like iris and vein scanners, fingerprint readers are built into most biometric products. Contrary to the assurance of the manufacturers, nearly every system is still very easy to hack.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2098.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>starbug</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2125@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2125</pentabarf:event-id>
+  <pentabarf:event-tag>hacking_life</pentabarf:event-tag>
+  <pentabarf:title>Hacking Life - Practical Social Engineering</pentabarf:title>
+  <pentabarf:subtitle>Wie man mit Insiderinfos kostenlose Reisen, Speisen oder sogar Hardware erlangen kann</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070914T220000</dtstart>
+  <dtend>20070914T230000</dtend>
+  <duration>1H</duration>
+  <summary>Hacking Life - Practical Social Engineering - Wie man mit Insiderinfos kostenlose Reisen, Speisen oder sogar Hardware erlangen kann</summary>
+
+  <description>Social Engineering wird die Kunst genannt, Menschen zu hacken. Der Vortrag zeigt, wie einfach es ist, Menschen, Organisationen oder Staaten zu hacken und sich Dinge zu verschaffen, die nicht unbedingt für einen gedacht waren.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2125.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>Muelli</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2174@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2174</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Hack-Trainer without a clue</pentabarf:title>
+  <pentabarf:subtitle>Experiences from the lecture hall</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070914T220000</dtstart>
+  <dtend>20070914T230000</dtend>
+  <duration>1H</duration>
+  <summary>Hack-Trainer without a clue - Experiences from the lecture hall</summary>
+
+  <description>Topic of this talk are experiences and some - assumingly - funny remarks about my experiences with teaching practical security while trying to grasp what this topic is about. I will, as well tell some stories that result from having a phone number and a security c(o)urse.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2174.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>lars</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2097@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2097</pentabarf:event-id>
+  <pentabarf:event-tag>hamburger_wahlstift</pentabarf:event-tag>
+  <pentabarf:title>Hamburger Wahlstift</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T130000</dtstart>
+  <dtend>20070915T140000</dtend>
+  <duration>1H</duration>
+  <summary>Hamburger Wahlstift</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2097.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Jens Muecke</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2111@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2111</pentabarf:event-id>
+  <pentabarf:event-tag>home_automation_with_knx_eib</pentabarf:event-tag>
+  <pentabarf:title>Home automation with KNX/EIB</pentabarf:title>
+  <pentabarf:subtitle>A nerd's dream come true: A microcontroller in every room</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T120000</dtstart>
+  <dtend>20070915T130000</dtend>
+  <duration>1H</duration>
+  <summary>Home automation with KNX/EIB - A nerd's dream come true: A microcontroller in every room</summary>
+
+  <description>EIB the European Installation Bus is a home automation system allowing a home to be computer controlled. Lights, windows, shutters, heating, locks etc. can be centrally controlled for more comfort, security and less operating costs.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2111.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>ixs</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2201@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2201</pentabarf:event-id>
+  <pentabarf:event-tag>HPP</pentabarf:event-tag>
+  <pentabarf:title>HPP (Hacker's Profiling Project) by ISECOM</pentabarf:title>
+  <pentabarf:subtitle>2006-2007 survey results</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T180000</dtstart>
+  <dtend>20070915T190000</dtend>
+  <duration>1H</duration>
+  <summary>HPP (Hacker's Profiling Project) by ISECOM - 2006-2007 survey results</summary>
+
+  <description>This talk will resume the last results gained from the HPP's 2006-2007survey. HPP started as an ISECOM project back in 2004 and nowadays isranked at its project phase # 3 (Honeynets).The main goal of HPP is to bring to the public audience a true image ofthe hacker's world, cutting away all those wrong myths and false clichesgenerated by the mass-medias.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2201.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>Raoul</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2118@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2118</pentabarf:event-id>
+  <pentabarf:event-tag>incident_response_and_forensics</pentabarf:event-tag>
+  <pentabarf:title>Incident Response and Forensics</pentabarf:title>
+  <pentabarf:subtitle>Howto examine and fix a malfunctioning b0x</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070914T220000</dtstart>
+  <dtend>20070914T230000</dtend>
+  <duration>1H</duration>
+  <summary>Incident Response and Forensics - Howto examine and fix a malfunctioning b0x</summary>
+
+  <description>The scenario is a &quot;owned&quot; computer which acts in a way it should not. The talk will only cover one scenario (either linux or win32) though most of its proceedings can be used in other situations as well.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2118.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>d1g</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2149@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2149</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Jugendprojekt U23 2007</pentabarf:title>
+  <pentabarf:subtitle>Vorstellung und Ergebnisse des diesjährigen U23</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T120000</dtstart>
+  <dtend>20070915T130000</dtend>
+  <duration>1H</duration>
+  <summary>Jugendprojekt U23 2007 - Vorstellung und Ergebnisse des diesjährigen U23</summary>
+
+  <description>Ein paar Ergebnisse des gemeinsamen Jugendprojekts U23, das erstmalig parallel in Darmstadt und Köln stattgefunden hat, werden vorgestellt.  Die Tutoren erklären, was das U23 ist und ein paar Teilnehmer zeigen ihre Bastelprojekte.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2149.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>bios</attendee>
+
+  <attendee>Lars Weiler</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2092@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2092</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Kryptographie: Sicherheit beweisen</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T200000</dtstart>
+  <dtend>20070915T210000</dtend>
+  <duration>1H</duration>
+  <summary>Kryptographie: Sicherheit beweisen</summary>
+
+  <description>In diesem Vortrag wird der für die moderne Kryptographie unverzichtbare Begriff einesSicherheitsbeweises näher betrachtet: Was heisst es, dass ein Kryptosystem als sicher &quot;bewiesen&quot;wurde? Insbesondere betrachten wir sogenannte Reduktionsbeweise, und zeigen einige Fälleaus der Krypto-Literatur, bei denen Probleme im Zusammenhang mit solchen Reduktionen auftraten.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2092.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>Marc Fischlin</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2121@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2121</pentabarf:event-id>
+  <pentabarf:event-tag>kryptoprozesor_bauen</pentabarf:event-tag>
+  <pentabarf:title>Kryptoprozessor bauen</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T150000</dtstart>
+  <dtend>20070915T170000</dtend>
+  <duration>2H</duration>
+  <summary>Kryptoprozessor bauen</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2121.en.html</url>
+
+  <location>workshop</location>
+
+
+  <attendee>Andreas Portele</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2109@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2109</pentabarf:event-id>
+  <pentabarf:event-tag>lightning_talks</pentabarf:event-tag>
+  <pentabarf:title>Lightning Talks</pentabarf:title>
+  <pentabarf:subtitle>spannende kurzvortraege</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T160000</dtstart>
+  <dtend>20070915T180000</dtend>
+  <duration>2H</duration>
+  <summary>Lightning Talks - spannende kurzvortraege</summary>
+
+  <description>bis zu 10 spontane Kurzvorträge a 5min.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2109.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>bios</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2142@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2142</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Microcars - qualifying</pentabarf:title>
+  <pentabarf:subtitle>The great price of Darmstadt</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T230000</dtstart>
+  <dtend>20070916T010000</dtend>
+  <duration>2H</duration>
+  <summary>Microcars - qualifying - The great price of Darmstadt</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2142.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>bios</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2141@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2141</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Microcars - training</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070914T230000</dtstart>
+  <dtend>20070915T010000</dtend>
+  <duration>2H</duration>
+  <summary>Microcars - training</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2141.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>bios</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2095@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2095</pentabarf:event-id>
+  <pentabarf:event-tag>blue_radio_waves</pentabarf:event-tag>
+  <pentabarf:title>More fun with Blue Radio Waves</pentabarf:title>
+  <pentabarf:subtitle>Bluetooth sniffing once was expensive now it is free, lets have fun!</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070914T210000</dtstart>
+  <dtend>20070914T220000</dtend>
+  <duration>1H</duration>
+  <summary>More fun with Blue Radio Waves - Bluetooth sniffing once was expensive now it is free, lets have fun!</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2095.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>iamabanana</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2140@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2140</pentabarf:event-id>
+  <pentabarf:event-tag>blue_radio_waves_workshop</pentabarf:event-tag>
+  <pentabarf:title>More fun with Blue Radio Waves - workshop</pentabarf:title>
+  <pentabarf:subtitle>the workshop for the bluetooth talk</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070914T220000</dtstart>
+  <dtend>20070915T000000</dtend>
+  <duration>2H</duration>
+  <summary>More fun with Blue Radio Waves - workshop - the workshop for the bluetooth talk</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2140.en.html</url>
+
+  <location>workshop</location>
+
+
+  <attendee>iamabanana</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2143@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2143</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>moviez Freitag</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T010000</dtstart>
+  <dtend>20070915T040000</dtend>
+  <duration>3H</duration>
+  <summary>moviez Freitag</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2143.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>bios</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2144@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2144</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>moviez Sonnabend</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070916T000000</dtstart>
+  <dtend>20070916T040000</dtend>
+  <duration>4H</duration>
+  <summary>moviez Sonnabend</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2144.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>mc.fly</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2103@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2103</pentabarf:event-id>
+  <pentabarf:event-tag>mrmcd110b_closing_event</pentabarf:event-tag>
+  <pentabarf:title>mrmcd110b closing event</pentabarf:title>
+  <pentabarf:subtitle>what happened and have a nice trip home</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070916T150000</dtstart>
+  <dtend>20070916T160000</dtend>
+  <duration>1H</duration>
+  <summary>mrmcd110b closing event - what happened and have a nice trip home</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2103.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>bios</attendee>
+
+  <attendee>g0ph3r</attendee>
+
+  <attendee>mc.fly</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2102@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2102</pentabarf:event-id>
+  <pentabarf:event-tag>mrmcd110b_opening_ceremony</pentabarf:event-tag>
+  <pentabarf:title>mrmcd110b opening ceremony</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070914T190000</dtstart>
+  <dtend>20070914T200000</dtend>
+  <duration>1H</duration>
+  <summary>mrmcd110b opening ceremony</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2102.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>mc.fly</attendee>
+
+  <attendee>g0ph3r</attendee>
+
+  <attendee>bios</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2164@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2164</pentabarf:event-id>
+  <pentabarf:event-tag>nedap_wahlcomputer</pentabarf:event-tag>
+  <pentabarf:title>NEDAP-Wahlcomputer</pentabarf:title>
+  <pentabarf:subtitle>Manipulationssicherheit und Angriffsmethoden</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T150000</dtstart>
+  <dtend>20070915T160000</dtend>
+  <duration>1H</duration>
+  <summary>NEDAP-Wahlcomputer - Manipulationssicherheit und Angriffsmethoden</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2164.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Constanze Kurz</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2116@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2116</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>OpenBDSM: Bondage for Geeks</pentabarf:title>
+  <pentabarf:subtitle>Spaß mit Tape, Kabelbindern und vielem mehr</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070914T230000</dtstart>
+  <dtend>20070914T233000</dtend>
+  <duration>0H</duration>
+  <summary>OpenBDSM: Bondage for Geeks - Spaß mit Tape, Kabelbindern und vielem mehr</summary>
+
+  <description>Ein Workshop für die Leute, die andere auf Chaos-Events schon immer gern gefesselt haben. Allerdings werden hier keine hochkomplexen Techniken vorgestellt, sondern wir verstehen uns eher als Forum für die Bondage-interessierten Geeks.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2116.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Downhill</attendee>
+
+  <attendee>Bine</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2107@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2107</pentabarf:event-id>
+  <pentabarf:event-tag>openmoko_and_the_neo1973</pentabarf:event-tag>
+  <pentabarf:title>Openmoko and the Neo1973 - A closer look</pentabarf:title>
+  <pentabarf:subtitle>The current status of the hacker's phone</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T170000</dtstart>
+  <dtend>20070915T180000</dtend>
+  <duration>1H</duration>
+  <summary>Openmoko and the Neo1973 - A closer look - The current status of the hacker's phone</summary>
+
+  <description>The Neo1973/openmoko phone has the ability to become the hacker's choice handset: The software is open-source and customizable to a degree never found before.This talk will give an overview of the phone and it's software and show at which stage the development is currently and where it will go.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2107.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>ixs</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2132@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2132</pentabarf:event-id>
+  <pentabarf:event-tag>pornophonique_live_concert</pentabarf:event-tag>
+  <pentabarf:title>Pornophonique live concert</pentabarf:title>
+  <pentabarf:subtitle>a guitar and some mature computers</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070914T233000</dtstart>
+  <dtend>20070915T010000</dtend>
+  <duration>1H</duration>
+  <summary>Pornophonique live concert - a guitar and some mature computers</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2132.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Pornophonique</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2150@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2150</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>regiotreff metarheinmain</pentabarf:title>
+  <pentabarf:subtitle>der regiotreff der metarheinmain region</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070916T140000</dtstart>
+  <dtend>20070916T150000</dtend>
+  <duration>1H</duration>
+  <summary>regiotreff metarheinmain - der regiotreff der metarheinmain region</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2150.en.html</url>
+
+  <location>C110</location>
+
+
+  <attendee>mc.fly</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2147@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2147</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>The grand prix of Darmstadt</pentabarf:title>
+  <pentabarf:subtitle>Gaming the night away</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070916T010000</dtstart>
+  <dtend>20070916T030000</dtend>
+  <duration>2H</duration>
+  <summary>The grand prix of Darmstadt - Gaming the night away</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2147.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>bios</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2177@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2177</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>TK-Vorratsdatenspeicherung - Ein weiterer Schritt in die Überwachungsgesellschaft</pentabarf:title>
+  <pentabarf:subtitle></pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070916T140000</dtstart>
+  <dtend>20070916T150000</dtend>
+  <duration>1H</duration>
+  <summary>TK-Vorratsdatenspeicherung - Ein weiterer Schritt in die Überwachungsgesellschaft</summary>
+
+  <description>Nach Plänen von CDU, CSU und SPD soll ab 2008 nachvollziehbar werden, wer mit wem in den letzten sechs Monaten per Telefon, Handy oder E-Mail in Verbindung gestanden oder das Internet genutzt hat. Bei Handy-Telefonaten und SMS soll auch der jeweilige Standort des Benutzers festgehalten werden. Anonymisierungsdienste sollen verboten werden.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2177.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Werner (FIfF e.V.)</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2167@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2167</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Unreal Hacking</pentabarf:title>
+  <pentabarf:subtitle>An introduction to the game engine that revolutionized the computer game world, followed by a workshop for people interested in experimenting with it</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070914T200000</dtstart>
+  <dtend>20070914T210000</dtend>
+  <duration>1H</duration>
+  <summary>Unreal Hacking - An introduction to the game engine that revolutionized the computer game world, followed by a workshop for people interested in experimenting with it</summary>
+
+  <description>When computers became powerful enough to easily perform the tasks laid on them, the focus shifted from creating fast code to fast creating of elegant, functional, modular, platform-independent and secure code. Technologies like the Java platform revolutionized big parts of the software world. In 1998, a game engine called the Unreal Engine was created, which introduced these concepts in the world of computer game development. This talk will give an overview of the Unreal technology, show some benchmarks, as well as some usual -- and not so usual -- usage examples to demonstrate the uniquity of the Unreal Approach.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2167.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Christian Esperer</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2169@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2169</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Unreal hacking workshop</pentabarf:title>
+  <pentabarf:subtitle>workshop of the 'unreal hacking' talk</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070914T210000</dtstart>
+  <dtend>20070914T220000</dtend>
+  <duration>1H</duration>
+  <summary>Unreal hacking workshop - workshop of the 'unreal hacking' talk</summary>
+
+  <description>Experimenting with the Unreal Engine. You can create a mod, explore the UnrealScript code, try to write native code, discuss the engine,...</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2169.en.html</url>
+
+  <location>workshop</location>
+
+
+  <attendee>Christian Esperer</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2137@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2137</pentabarf:event-id>
+  <pentabarf:event-tag></pentabarf:event-tag>
+  <pentabarf:title>Videoüberwachung - Teil 2</pentabarf:title>
+  <pentabarf:subtitle>Aktueller Stand der Videoüberwachung</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070916T120000</dtstart>
+  <dtend>20070916T130000</dtend>
+  <duration>1H</duration>
+  <summary>Videoüberwachung - Teil 2 - Aktueller Stand der Videoüberwachung</summary>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2137.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>telmich</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2119@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2119</pentabarf:event-id>
+  <pentabarf:event-tag>vortraege_richtig_halten</pentabarf:event-tag>
+  <pentabarf:title>Vorträge richtig halten (nicht nur für Nerds)</pentabarf:title>
+  <pentabarf:subtitle>Ein Metavortrag über Vorträge</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070914T210000</dtstart>
+  <dtend>20070914T220000</dtend>
+  <duration>1H</duration>
+  <summary>Vorträge richtig halten (nicht nur für Nerds) - Ein Metavortrag über Vorträge</summary>
+
+  <description>Viele Nerds haben Wissen, das sie auch gerne teilen würden. Oftmals scheitert das aber in Teilen oder gleich komplett an der Frage: &quot;Wie eigentlich?&quot;.Dieser Vortrag widmet sich den alltäglichen Problemen eines Referenten: Was kommt in die Folien? Was nicht? Und wie mache ich meine Inhalte verständlich?</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2119.en.html</url>
+
+  <location>C120</location>
+
+
+  <attendee>Julian 'hds' Finn</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2094@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2094</pentabarf:event-id>
+  <pentabarf:event-tag>voting_design_principles</pentabarf:event-tag>
+  <pentabarf:title>Voting mechanics design principles workshop</pentabarf:title>
+  <pentabarf:subtitle>A short exploration of some voting mechanisms through time to discover the principles that a good voting system should have</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T200000</dtstart>
+  <dtend>20070915T210000</dtend>
+  <duration>1H</duration>
+  <summary>Voting mechanics design principles workshop - A short exploration of some voting mechanisms through time to discover the principles that a good voting system should have</summary>
+
+  <description>A short exploration of some voting mechanisms through time to discover the principles that a good voting system should have. This workshop will look at a couple of historic systems ancient and modern and try to derive some design principles from them.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2094.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Emerson</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2099@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2099</pentabarf:event-id>
+  <pentabarf:event-tag>wahlcomputer_gesellschaft</pentabarf:event-tag>
+  <pentabarf:title>Wahlcomputer und Gesellschaft</pentabarf:title>
+  <pentabarf:subtitle>Ergebnis nach Wunsch?</pentabarf:subtitle>
+  <pentabarf:language>German</pentabarf:language>
+  <pentabarf:language-code>de</pentabarf:language-code>
+  <dtstart>20070915T180000</dtstart>
+  <dtend>20070915T190000</dtend>
+  <duration>1H</duration>
+  <summary>Wahlcomputer und Gesellschaft - Ergebnis nach Wunsch?</summary>
+
+  <description>Ob Wahlcomputer Fluch oder Segen für eine stabile Demokratie wie Deutschland sind, ist derzeit umstritten. Die Argumente für und gegen den Einsatz der Rechner bei politischen Wahlen wird Thema dieses Vortrags sein.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2099.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Constanze Kurz</attendee>
+
+</vevent>
+
+<vevent>
+  <method>PUBLISH</method>
+  <uid>2200@mrmcd110b@pentabarf.org</uid>
+  <pentabarf:event-id>2200</pentabarf:event-id>
+  <pentabarf:event-tag>SCADA_SCADA</pentabarf:event-tag>
+  <pentabarf:title>Welcome to the SCADA world</pentabarf:title>
+  <pentabarf:subtitle>penetration testing and the CrISTAL project</pentabarf:subtitle>
+  <pentabarf:language>English</pentabarf:language>
+  <pentabarf:language-code>en</pentabarf:language-code>
+  <dtstart>20070915T210000</dtstart>
+  <dtend>20070915T220000</dtend>
+  <duration>1H</duration>
+  <summary>Welcome to the SCADA world - penetration testing and the CrISTAL project</summary>
+
+  <description>This talk will introduce the audience to SCADA environments and itstotally different security approaches, outlining the main keydifferences with typical IT Security best practices. We will analyze alot of real world case studies related to Industry, Energy and otherfields. We will describe the most common security mistakes and some ofthe dire consequences of such mistakes to a production environment. Inaddition, attendees will be shown videos of real SCADA machines reactingto these attacks in the most interesting of ways, as well asinterviews with SCADA people.</description>
+
+  <class>PUBLIC</class>
+  <status>CONFIRMED</status>
+  <category>Lecture</category>
+  <url>/fahrplan/events/2200.en.html</url>
+
+  <location>C205</location>
+
+
+  <attendee>Raoul</attendee>
+
+</vevent>
+
+
+ </vcalendar>
+</iCalendar>
