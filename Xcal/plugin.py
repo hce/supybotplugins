@@ -45,7 +45,8 @@ class FeedReader(threading.Thread):
         threading.Thread.__init__(self)
         self.plugin = plugin
         self.events = []
-        self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
+        # self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
+        self.RSSURL = ("www.hcesperer.org", '/temp/schedule.en.xcs')
         self.REFRESH_INTERVAL = 60 # 60 s; should be something like 1800 for production use probably...
         self.ANNOUNCETIME = 60 # announce 60s prior to event
         self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
