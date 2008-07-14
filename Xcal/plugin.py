@@ -48,10 +48,14 @@ class FeedReader(threading.Thread):
         self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
         self.REFRESH_INTERVAL = 60 # 60 s; should be something like 1800 for production use probably...
         self.ANNOUNCETIME = 60 # announce 60s prior to event
-        self.ANNOUNCEMESSAGE = "Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s\n==> %(summary)s <=="
+        self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
+==> %(summary)s
+==> Diese Veranstaltung findet in Raum %(location)s statt. Dauer: %(duration)s
+<== END OF DETAILS FOR THIS VERANSTALTUNG ==="""
+        self.ANNOUNCECHANNEL = '#mrmcd111b'
     def DoRefresh(self):
         xcal = xcalparser.XCal(self.RSSURL)
-        newevents = [e for e in xcal.GetPostTimeEvents(time()) if e not in self.events]
+        newevents = [e for e in xcal.GetPostTimeEvents(time.time()) if e not in self.events]
         n = len(newevents)
         if n:
             print 'Added %d new events.' % n
@@ -59,10 +63,10 @@ class FeedReader(threading.Thread):
     def run(self):
         self.next_refresh = 0
         while True:
-            time.sleep(60)
+            time.sleep(10)
             if time.time() > self.next_refresh:
                 self.DoRefresh()
-                self.next_refresh = time.time() + self.REFRESH_INTERFAL
+                self.next_refresh = time.time() + self.REFRESH_INTERVAL
             while True:
                 try: atime, event = self.events[0]
                 except: break
@@ -70,7 +74,9 @@ class FeedReader(threading.Thread):
                     amsg = self.ANNOUNCEMESSAGE % event.dict()
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
-                        self.plugin.irc.queuemsg(tmsg)
+                        self.plugin.irc.queueMsg(tmsg)
+                del self.events[0]
+                time.sleep(10)
 
 
 class Xcal(callbacks.Plugin):
@@ -79,7 +85,7 @@ class Xcal(callbacks.Plugin):
     threaded = True
 
     def __init__(self, irc):
-        self.__parent = super(Playlist, self)
+        self.__parent = super(Xcal, self)
         self.__parent.__init__(irc)
         self.irc = irc
         self.feedreader = FeedReader(self)

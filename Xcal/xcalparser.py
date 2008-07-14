@@ -40,10 +40,12 @@ class XCalEvent:
         else: return l
     def dict(self):
         d = {}
-        for k, v in self.items:
+        for k in self.items:
+            v = self.items[k]
             if len(v) > 1: v = ' und '.join(v)
             else: v = v[0]
-            d[k] = v
+            d[k.encode('ascii', 'ignore')] = v.encode('ascii', 'ignore')
+        return d
     def getTime(self, key):
         rd = self.items[key][0]
         datetime = rd.split('T')
