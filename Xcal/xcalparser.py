@@ -45,6 +45,8 @@ class XCalEvent:
             if len(v) > 1: v = ' und '.join(v)
             else: v = v[0]
             d[k.encode('ascii', 'ignore')] = v.encode('ascii', 'ignore')
+        try: d['begintime'] = self.getTime('dtstart')
+        except: d['begintime'] = 'unknown'
         return d
     def getTime(self, key):
         rd = self.items[key][0]

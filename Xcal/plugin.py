@@ -45,21 +45,24 @@ class FeedReader(threading.Thread):
         threading.Thread.__init__(self)
         self.plugin = plugin
         self.events = []
+        self.uids = []
         # self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
         self.RSSURL = ("www.hcesperer.org", '/temp/schedule.en.xcs')
         self.REFRESH_INTERVAL = 60 # 60 s; should be something like 1800 for production use probably...
         self.ANNOUNCETIME = 60 # announce 60s prior to event
         self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
 ==> %(summary)s
-==> Diese Veranstaltung findet in Raum %(location)s statt. Dauer: %(duration)s
+==> Diese Veranstaltung findet in Raum %(location)s statt.
+==> Beginn: %(begintime)s; Dauer: %(duration)s
 <== END OF DETAILS FOR THIS VERANSTALTUNG ==="""
         self.ANNOUNCECHANNEL = '#mrmcd111b'
     def DoRefresh(self):
         xcal = xcalparser.XCal(self.RSSURL)
-        newevents = [e for e in xcal.GetPostTimeEvents(time.time()) if e not in self.events]
+        newevents = [e for e in xcal.GetPostTimeEvents(time.time()) if e[1].get('uid') not in self.uids]
+        for event in newevents: self.uids.append(event[1].get('uid'))
         n = len(newevents)
         if n:
-            print 'Added %d new events.' % n
+            print 'Added %d new event%s.' % (n, {True: '', False: 's'}[n == 1])
             self.events = self.events + newevents
     def run(self):
         self.next_refresh = 0
@@ -76,8 +79,9 @@ class FeedReader(threading.Thread):
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
                         self.plugin.irc.queueMsg(tmsg)
-                del self.events[0]
-                time.sleep(10)
+                    del self.events[0]
+                    time.sleep(10)
+                else: break
 
 
 class Xcal(callbacks.Plugin):
