@@ -40,7 +40,7 @@ import xcalparser
 import time as modtime
 import threading
 
-diff = modtime.time() - modtime.mktime((2007,9,14,20,54,00,0,196,1))
+diff = modtime.time() - modtime.mktime((2007,9,15,14,45,00,0,196,1))
 
 def time():
     return modtime.time() - diff
@@ -83,8 +83,8 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                 try: atime, event = self.events[0]
                 except: break
                 if time() > (atime - self.ANNOUNCETIME):
-                    self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
-                            modtime.asctime(modtime.localtime(time()))))
+                    # self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
+                    #         modtime.asctime(modtime.localtime(time()))))
                     amsg = self.ANNOUNCEMESSAGE % event.dict()
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
