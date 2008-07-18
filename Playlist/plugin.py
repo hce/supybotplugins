@@ -615,6 +615,11 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
     showannounces = wrap(showannounces, [])
 
     def delannounce(self, irc, msg, args, num):
+        """<announce ID>
+
+        Delete announce with ID. Use 'showannounces' to get a list of
+        pending announces and their IDs. Not that all IDs may change
+        after one item has been added / removed."""
         try:
             self.sa.remove(num)
             self.saved = False
@@ -624,6 +629,9 @@ If you've got additional questions, mail hc@hcesperer.org""".split("\n"): irc.er
     delannounce = wrap(delannounce, ['nonNegativeInt'])
 
     def clearannounces(self, irc, msg, args):
+        """
+
+        Clear all set announces"""
         self.sa.clear()
         self.saved = False
         irc.replySuccess()
