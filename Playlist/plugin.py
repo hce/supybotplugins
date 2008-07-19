@@ -50,6 +50,7 @@ import random
 from sha import sha
 
 MAX_TIMEOUT = 60
+MAX_TIME_PLAYING = 600 # Tracks are no longer than 600 minutes
 
 
 class EOFException(Exception): pass
@@ -134,9 +135,12 @@ class SockHandler(threading.Thread):
         except:
             self.s.sendall('340 add ALBUM, TITLE\n')
             return
+        if time() > self.plugin.expnumberplaying:
+            self.plugin.numberplaying = 0
         self.plugin.playing = {"album": album, "title": title}
         self.plugin.DoActivate()
         self.plugin.numberplaying = self.plugin.numberplaying + 1
+        self.plugin.expnumberplaying = time() + MAX_TIME_PLAYING
         self.s.sendall("200 track queued\n")
     def FCT_gettopic(self, params):
         if not self.authed:
@@ -160,6 +164,8 @@ class SockHandler(threading.Thread):
         if self.plugin.playing == None:
             self.s.sendall('201 no track playing ATM\n')
             return
+        if time() > self.plugin.expnumberplaying:
+            self.plugin.numberplaying = 0
         if self.plugin.numberplaying <= 1:
             self.plugin.DoFinish()
             self.s.sendall('200 track is finished\n')
@@ -396,6 +402,7 @@ class Playlist(callbacks.Plugin):
         self.sa.setDaemon(True)
         self.sa.start()
         self.numberplaying = 0
+        self.expnumberplaying = 0
         self.saved = True
         self.logfile = None
         self.playing = None
