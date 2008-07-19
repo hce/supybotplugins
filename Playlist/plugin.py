@@ -323,11 +323,12 @@ class ScheduledAnnouncer(threading.Thread):
     def __init__(self, channel, irc):
         threading.Thread.__init__(self)
         self.channel = channel
+        self.dorun = True
         self.irc = irc
         self.messages = []
         self.lock = threading.Lock()
     def run(self):
-        while True:
+        while self.dorun:
             sleep(self.SLEEP_TIME)
             try:
                 self.lock.acquire_lock()
@@ -346,6 +347,7 @@ class ScheduledAnnouncer(threading.Thread):
                     self.irc.queueMsg(tmsg)
                     del self.messages[0]
             finally: self.lock.release_lock()
+    def stop(self): self.dorun = False
     def additem(self, atime, message):
         try:
             self.lock.acquire_lock()
