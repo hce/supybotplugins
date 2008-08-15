@@ -40,7 +40,7 @@ import xcalparser
 import time as modtime
 import threading
 
-diff = modtime.time() - modtime.mktime((2008,9,5,14,52,00,0,196,1))
+diff = modtime.time() - modtime.mktime((2008,9,5,20,13,00,0,196,1))
 
 def time():
     return modtime.time() - diff
@@ -56,7 +56,7 @@ class FeedReader(threading.Thread):
         # self.RSSURL = ("www.hcesperer.org", '/temp/schedule.en.xcs')
         self.RSSURL = ("cyber-trooper.de", "/xcal/conference/59%3flanguage=en")
         self.REFRESH_INTERVAL = 1800 # 30 mins
-        self.ANNOUNCETIME = 300 # 5 mins
+        self.ANNOUNCETIME = 600 # 10 mins
         self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
 %(summary)s
 Diese Veranstaltung findet in Raum %(location)s statt.
