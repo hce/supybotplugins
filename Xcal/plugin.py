@@ -86,14 +86,14 @@ hessisch = {
     " 2 ": "zwaa",
     " 30 ": "dreisisch",
     " und ": " unn ",
-    " 3 ": "drei",
-    " 4 ": "vier",
-    " 5 ": "fuenf",
-    " 6 ": "sexx",
-    " 7 ": "sibbe",
-    " 8 ": "acht",
-    " 9 ": "nein",
-    " 10 ": "zehe",
+    " 3 ": " drei ",
+    " 4 ": " vier ",
+    " 5 ": " fuenf ",
+    " 6 ": " sexx ",
+    " 7 ": " sibbe ",
+    " 8 ": " acht ",
+    " 9 ": " nein ",
+    " 10 ": " zehe ",
 }
 
 def tohessisch(hochteutsch):
