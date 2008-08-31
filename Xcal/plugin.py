@@ -67,7 +67,7 @@ def niceduration(duration):
 
 # eher darmstaedter dialekt
 hessisch = {
-    'Gleich fuer euch auf den mrmcds': "Uffgepasst! Gleisch fier eisch uff de mrmcds",
+    'Gleich fuer euch auf den mrmcds': "Uffgebasst! Gleisch fier eisch uff de mrmcds",
     " von ": " vomm ",
     "Diese Veranstaltung findet ": "Dess tut ",
     " statt": " stattfinne",
