@@ -44,6 +44,7 @@ import threading
 diff = modtime.time() - modtime.mktime((2008,9,5,17,49,00,0,196,1))
 
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
+locationfoo = re.compile("([A-E][0-9]{3})")
 
 def niceduration(duration):
     try:
@@ -51,17 +52,26 @@ def niceduration(duration):
         s = []
         if hrs != 0:
             if hrs == 1: s.append("Eine Stunde")
-            else: s.append("%d Stunden" % hrs)
+            else: s.append("%s Stunden" % hrs)
         if mins != 0:
             if mins == 1: s.append("eine Minute")
-            else: s.append("%d Minuten")
+            else: s.append("%d Minuten", mins)
         if secs != 0:
             if secs == 1: s.append("eine Sekunde")
-            else: s.append("%d Sekunden")
+            else: s.append("%d Sekunden", secs)
         if len(s) == 1: return s[0]
         elif len(s) == 2: return " und ".join(s)
         else: return "%s, %s und %s" % tuple(s)
     except: return duration
+
+def makeloc(foo):
+    bar = locationfoo.search(foo)
+    if bar != None:
+        return 'in Raum %s' % bar.groups()[0]
+    try: return {'workshop': 'im Workshopraum',
+            'outdoor': 'im Freien',
+            'musicstage': 'auf der Musicstage'}[foo.strip().lower()]
+    except: return 'im/auf/bei "%s"' % foo
 
 def time():
     return modtime.time() - diff
@@ -79,7 +89,7 @@ class FeedReader(threading.Thread):
         self.ANNOUNCETIME = 600 # 10 mins
         self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
 %(summary)s
-Diese Veranstaltung findet in Raum %(location)s statt.
+Diese Veranstaltung findet %(location)s statt.
 Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
         self.ANNOUNCECHANNEL = '#mrmcd111b-bot'
     def DoRefresh(self):
@@ -114,6 +124,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                     if not 'begintime' in edict: edict['begintime'] = "Keine Ahnung, wann's losgeht"
                     if not 'duration' in edict: edict['duration'] = "Zu lange"
                     edict['duration'] = niceduration(edict['duration'])
+                    edict['location'] = makeloc(edict['location'])
                     amsg = self.ANNOUNCEMESSAGE % edict
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
