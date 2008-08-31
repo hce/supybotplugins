@@ -64,6 +64,32 @@ def niceduration(duration):
         else: return "%s, %s und %s" % tuple(s)
     except: return duration
 
+hessisch = {
+    'Gleich fuer euch auf den mrmcds': "Uffgepasst! Gleisch fier eisch uff de mrmcds",
+    " von ": " vomm ",
+    "Diese Veranstaltung findet ": "Dess tut ",
+    " statt": " stattfinne",
+    "in Raum": "imm Zimma",
+    "Beginn:": "Oofange tut des umm",
+    "; Dauer:": "unn dauert",
+    "Eine": "aa",
+    "Stunden": "Stunne",
+    "Stunde": "Stunn",
+    "Minuten": "Minute",
+    "Sekunden": "Sekunde",
+    "im Workshopraum": "bei de worschdler",
+    "auf der Musicstage": "uff de WET-Staittsch",
+    "in einem VPN": "innem faupeenn",
+    "im Freien": "inner freie Nadur",
+    " 2 ": "zwaa",
+    " 30 ": "dreisisch",
+    " und ": " unn "
+}
+
+def tohessisch(hochteutsch):
+    for k in hessisch: hochteutsch = hochteutsch.replace(k, hessisch[k])
+    return hochteutsch
+
 def makeloc(foo):
     bar = locationfoo.search(foo)
     if bar != None:
@@ -127,6 +153,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                     edict['duration'] = niceduration(edict['duration'])
                     edict['location'] = makeloc(edict['location'])
                     amsg = self.ANNOUNCEMESSAGE % edict
+                    amsg = tohessisch(amsg)
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
                         self.plugin.irc.queueMsg(tmsg)
