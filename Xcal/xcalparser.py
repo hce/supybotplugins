@@ -42,7 +42,9 @@ class XCalEvent:
         d = {}
         for k in self.items:
             v = self.items[k]
-            if len(v) > 1: v = ' und '.join(v)
+            if len(v) > 2:
+	    	vtmp = ', '.join(v[:-1])
+		v = " und ".join([vtmp, v[-1]])
             else: v = v[0]
             d[k] = v
         try: d['begintime'] = time.strftime('%H:%M', time.localtime(self.getTime('dtstart')))
