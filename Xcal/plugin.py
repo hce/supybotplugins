@@ -41,7 +41,7 @@ import xcalparser
 import time as modtime
 import threading
 
-diff = modtime.time() - modtime.mktime((2008,9,5,17,49,00,0,196,1))
+diff = modtime.time() - modtime.mktime((2008,9,5,22,49,00,0,196,1))
 
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
 locationfoo = re.compile("([A-E][0-9]{3})")
@@ -55,10 +55,10 @@ def niceduration(duration):
             else: s.append("%s Stunden" % hrs)
         if mins != 0:
             if mins == 1: s.append("eine Minute")
-            else: s.append("%d Minuten", mins)
+            else: s.append("%d Minuten" % mins)
         if secs != 0:
             if secs == 1: s.append("eine Sekunde")
-            else: s.append("%d Sekunden", secs)
+            else: s.append("%d Sekunden" % secs)
         if len(s) == 1: return s[0]
         elif len(s) == 2: return " und ".join(s)
         else: return "%s, %s und %s" % tuple(s)
