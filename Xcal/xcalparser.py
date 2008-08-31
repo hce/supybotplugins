@@ -42,7 +42,7 @@ class XCalEvent:
         d = {}
         for k in self.items:
             v = self.items[k]
-            if len(v) > 2:
+            if len(v) > 1:
 	    	vtmp = ', '.join(v[:-1])
 		v = " und ".join([vtmp, v[-1]])
             else: v = v[0]
