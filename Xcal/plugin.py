@@ -35,6 +35,7 @@ import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 from supybot.ircmsgs import privmsg, topic
 import re
+from random import random
 
 import xcalparser
 
@@ -64,6 +65,7 @@ def niceduration(duration):
         else: return "%s, %s und %s" % tuple(s)
     except: return duration
 
+# eher darmstaedter dialekt
 hessisch = {
     'Gleich fuer euch auf den mrmcds': "Uffgepasst! Gleisch fier eisch uff de mrmcds",
     " von ": " vomm ",
@@ -71,7 +73,7 @@ hessisch = {
     " statt": " stattfinne",
     "in Raum": "imm Zimma",
     "Beginn:": "Oofange tut des umm",
-    "; Dauer:": "unn dauert",
+    "; Dauer:": " unn dauert",
     "Eine": "aa",
     "Stunden": "Stunne",
     "Stunde": "Stunn",
@@ -83,7 +85,15 @@ hessisch = {
     "im Freien": "inner freie Nadur",
     " 2 ": "zwaa",
     " 30 ": "dreisisch",
-    " und ": " unn "
+    " und ": " unn ",
+    " 3 ": "drei",
+    " 4 ": "vier",
+    " 5 ": "fuenf",
+    " 6 ": "sexx",
+    " 7 ": "sibbe",
+    " 8 ": "acht",
+    " 9 ": "nein",
+    " 10 ": "zehe",
 }
 
 def tohessisch(hochteutsch):
@@ -153,7 +163,8 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                     edict['duration'] = niceduration(edict['duration'])
                     edict['location'] = makeloc(edict['location'])
                     amsg = self.ANNOUNCEMESSAGE % edict
-                    amsg = tohessisch(amsg)
+                    if random() < 0.1:
+                        amsg = tohessisch(amsg)
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
                         self.plugin.irc.queueMsg(tmsg)
