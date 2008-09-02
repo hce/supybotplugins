@@ -42,7 +42,7 @@ import xcalparser
 import time as modtime
 import threading
 
-diff = modtime.time() - modtime.mktime((2008,9,6,13,49,00,0,196,1))
+diff = modtime.time() - modtime.mktime((2008,9,6,16,49,00,0,196,1))
 
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
 locationfoo = re.compile("([A-E][0-9]{3})")
@@ -136,10 +136,10 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
             for event in newevents: self.uids.append(event[1].get('uid'))
             n = len(newevents)
             if n:
-                print 'Added %d new event%s.' % (n, {True: '', False: 's'}[n == 1])
+                self.plugin.irc.queueMsg(privmsg('#mrmcd111b-bot', 'Added %d new event%s.' % (n, {True: '', False: 's'}[n == 1])))
                 self.events = self.events + newevents
         except Exception, e:
-            print 'Error: couldn\'t update: %s' % str(e)
+            self.plugin.irc.queueMsg(privmsg('#mrmcd111b-bot', 'Error: couldn\'t update: %s' % str(e)))
     def run(self):
         self.next_refresh = 0
         while not self.dostop:
@@ -163,7 +163,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                     edict['duration'] = niceduration(edict['duration'])
                     edict['location'] = makeloc(edict['location'])
                     amsg = self.ANNOUNCEMESSAGE % edict
-                    if random() < 0.1:
+                    if random() < 0.5:
                         amsg = tohessisch(amsg)
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
