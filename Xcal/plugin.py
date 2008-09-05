@@ -129,7 +129,7 @@ class FeedReader(threading.Thread):
 %(summary)s
 Diese Veranstaltung findet %(location)s statt.
 Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
-        self.ANNOUNCECHANNEL = '#mrmcd111b-bot'
+        self.ANNOUNCECHANNEL = '#mrmcd111b'
     def DoRefresh(self):
         try:
             xcal = xcalparser.XCal(self.RSSURL)
