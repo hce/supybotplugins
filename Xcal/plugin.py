@@ -42,7 +42,7 @@ import xcalparser
 import time as modtime
 import threading
 
-diff = modtime.time() - modtime.mktime((2008,9,6,16,49,00,0,196,1))
+diff = 0 # modtime.time() - modtime.mktime((2008,9,6,16,49,00,0,196,1))
 
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
 locationfoo = re.compile("([A-E][0-9]{3})")
@@ -122,6 +122,7 @@ class FeedReader(threading.Thread):
         self.dostop = False
         # self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
         self.RSSURL = ("www.hcesperer.org", '/temp/mrmcdtmp.txt')
+        # self.RSSURL = ("mrmcd.net", '/schedule/mrmcd111b/schedule.de.xcs')
         self.REFRESH_INTERVAL = 1800 # 30 mins
         self.ANNOUNCETIME = 600 # 10 mins
         self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
@@ -163,7 +164,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                     edict['duration'] = niceduration(edict['duration'])
                     edict['location'] = makeloc(edict['location'])
                     amsg = self.ANNOUNCEMESSAGE % edict
-                    if random() < 0.5:
+                    if random() < 0.1:
                         amsg = tohessisch(amsg)
                     for aline in amsg.split("\n"):
                         tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
