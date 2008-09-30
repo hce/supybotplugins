@@ -44,7 +44,8 @@ import urllib
 import threading
 import sys
 
-diff = 0 # modtime.time() - modtime.mktime((2008,9,6,16,49,00,0,196,1))
+diff = 0
+diff = modtime.time() - modtime.mktime((2008,9,6,9,49,00,0,196,1))
 
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
 locationfoo = re.compile("([A-E][0-9]{3})")
@@ -129,8 +130,8 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                 'outdoor': 'im Freien',
                 'contest': 'in einem VPN',
                 'musicstage': 'auf der Musicstage'}
-        self.events = {'mrmcd': ("#mrmcd111b-test", "MRMCDs", 1800, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
-        self.LoadSettings(self)
+        self.events = {'mrmcd': ("#mrmcd111b-test", "MRMCDs", 60, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
+        self.LoadSettings()
     def GetFN(self):
         pass
     def LoadSettings(self):
@@ -144,19 +145,18 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
             sys.stderr.write("Xcal: couldn't write settings: %s\n" % e)
     def DoRefresh(self, eventname):
         for event in [eventname]:
+            # print 'Refreshing %s' % event
             echan, ename, erefint, eantime, eurl, emsg = self.events[event]
-            try:
-                stuff = self.xcals[event]
-            except:
-                stuff = XCalStuff()
-                self.xcals[event] = stuff
+            stuff = self.xcals[event]
             try:
                 fhttp = urllib.urlopen(eurl)
                 s = fhttp.read()
                 fhttp.close()
                 if s == stuff.oldxml: continue
+                # print 'Changes detected for %s' % event
                 xcal = xcalparser.XCal(None, s)
                 stuff.xcal = xcal
+                stuff.oldxml = s
                 # newevents = [e for e in xcal.GetPostTimeEvents(time()) if e[1].get('uid') not in self.uids]
                 # for event in newevents: stuff.uids.append(event[1].get('uid'))
                 newevents = xcal.GetPostTimeEvents(time())
@@ -164,9 +164,13 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                 stuff.uids = newevents
                 n = len(newevents)
                 if n:
-                    msg = 'Updated %s: %d event%s.' % (ename, n, {True: '', False: 's'}[n == 1])
+                    msg = '[%s] reload: %d event%s.' % (ename, n, {True: '', False: 's'}[n == 1])
                     sys.stderr.write("%s\n" % msg)
                     stuff.events = newevents
+                else:
+                    msg = '[%s] reload: no events. Probably lies completely in the past.' % ename
+                    stuff.events = newevents
+                    sys.stderr.write("%s\n" % msg)
             except Exception, e:
                 error = 'Error: couldn\'t update: %s' % str(e)
                 sys.stderr.write("%s\n" % error)
@@ -180,7 +184,6 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
     def run(self):
         self.next_refresh = 0
         while not self.dostop:
-            modtime.sleep(10)
             for event in self.events:
                 echan, ename, erefint, eantime, eurl, emsg = self.events[event]
                 try:
@@ -188,13 +191,13 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                 except:
                     stuff = XCalStuff()
                     self.xcals[event] = stuff
-                if time() > self.nextrefresh:
+                if time() > stuff.nextrefresh:
                     self.DoRefresh(event)
                     stuff.nextrefresh = time() + erefint
                 while True:
                     try: atime, event = self.events[0]
                     except: break
-                    if time() > (atime - self.ANNOUNCETIME):
+                    if time() > (atime - eantime):
                         # self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
                         #         modtime.asctime(modtime.localtime(time()))))
                         edict = event.dict()
@@ -216,6 +219,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                         del self.events[0]
                         modtime.sleep(10)
                     else: break
+            modtime.sleep(10)
     def stop(self):
         self.dostop = True
 
