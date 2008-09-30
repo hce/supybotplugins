@@ -194,31 +194,32 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                 if time() > stuff.nextrefresh:
                     self.DoRefresh(event)
                     stuff.nextrefresh = time() + erefint
-                while True:
-                    try: atime, event = self.events[0]
-                    except: break
-                    if time() > (atime - eantime):
-                        # self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
-                        #         modtime.asctime(modtime.localtime(time()))))
-                        edict = event.dict()
-                        if not 'pentabarf:title' in edict: edict['pentabarf:title'] = "Unbenannte Veranstaltung"
-                        if not 'attendee' in edict: edict['attendee'] = "Anonymous coward"
-                        if not 'summary' in edict: edict['summary'] = "NO SUMMARY -- REPORT THIS AS A BUG"
-                        if not 'location' in edict: edict['location'] = 'foo bar'
-                        if not 'begintime' in edict: edict['begintime'] = "Keine Ahnung, wann's losgeht"
-                        if not 'duration' in edict: edict['duration'] = "Zu lange"
-                        edict['duration'] = niceduration(edict['duration'])
-                        edict['location'] = makeloc(edict['location'])
-                        edict['eventname'] = ename
-                        amsg = emsg % edict
-                        if random() < 0.1:
-                            amsg = tohessisch(amsg)
-                        for aline in amsg.split("\n"):
-                            tmsg = privmsg(echan, aline)
-                            self.plugin.irc.queueMsg(tmsg)
-                        del self.events[0]
-                        modtime.sleep(10)
-                    else: break
+                try:
+                    while True:
+                        try: atime, event = stuff.events[0]
+                        except: break
+                        if time() > (atime - eantime):
+                            # self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
+                            #         modtime.asctime(modtime.localtime(time()))))
+                            edict = event.dict()
+                            if not 'pentabarf:title' in edict: edict['pentabarf:title'] = "Unbenannte Veranstaltung"
+                            if not 'attendee' in edict: edict['attendee'] = "Anonymous coward"
+                            if not 'summary' in edict: edict['summary'] = "NO SUMMARY -- REPORT THIS AS A BUG"
+                            if not 'location' in edict: edict['location'] = 'foo bar'
+                            if not 'begintime' in edict: edict['begintime'] = "Keine Ahnung, wann's losgeht"
+                            if not 'duration' in edict: edict['duration'] = "Zu lange"
+                            edict['duration'] = niceduration(edict['duration'])
+                            edict['location'] = makeloc(edict['location'])
+                            edict['eventname'] = ename
+                            amsg = emsg % edict
+                            if random() < 0.1:
+                                amsg = tohessisch(amsg)
+                            for aline in amsg.split("\n"):
+                                tmsg = privmsg(echan, aline)
+                                self.plugin.irc.queueMsg(tmsg)
+                            del self.events[0]
+                        else: break
+                except: pass
             modtime.sleep(10)
     def stop(self):
         self.dostop = True
