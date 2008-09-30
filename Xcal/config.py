@@ -30,6 +30,17 @@
 
 import supybot.conf as conf
 import supybot.registry as registry
+import supybot.callbacks as callbacks
+import re
+
+class FoobarSeparatedListOfStrings(registry.SeparatedListOf):
+    Value = registry.String
+    def splitter(self, s):
+        return re.split(r'\s*===\s*', s)
+    joiner = '==='.join
+
+class EventNames(FoobarSeparatedListOfStrings):
+    List = callbacks.CanonicalNameSet
 
 def configure(advanced):
     # This will be called by supybot to configure this module.  advanced is
@@ -41,11 +52,9 @@ def configure(advanced):
 
 
 Xcal = conf.registerPlugin('Xcal')
-# This is where your configuration variables (if any) should go.  For example:
-# conf.registerGlobalValue(Xcal, 'someConfigVariableName',
-#     registry.Boolean(False, """Help for someConfigVariableName."""))
-conf.registerChannelValue(Xcal, 'rssURL',
-    registry.String("", """HTTP URL to the xcal file to interpret"""))
+conf.registerGlobalValue(Xcal, 'events',
+    EventNames([], """Defines available events (conferences)"""))
+
 
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

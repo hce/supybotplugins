@@ -33,6 +33,7 @@ from supybot.commands import *
 import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
+import supybot.registry as registry
 from supybot.ircmsgs import privmsg, topic
 import re
 from random import random
@@ -49,6 +50,11 @@ diff = modtime.time() - modtime.mktime((2008,9,6,9,49,58,0,196,1))
 
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
 locationfoo = re.compile("([A-E][0-9]{3})")
+
+ANNOUNCEMESSAGE = """==> Upcoming event at the %(eventname)s: %(pentabarf:title)s von %(attendee)s
+%(summary)s
+This event takes place %(location)s.
+Start: %(begintime)s; Duration: %(duration)s""".replace("\n", " -- ")
 
 def niceduration(duration):
     try:
@@ -122,16 +128,13 @@ class FeedReader(threading.Thread):
         self.log = plugin.log  # convenience reference
         self.xcals = {}
         self.dostop = False
-        ANNOUNCEMESSAGE = """==> Upcoming event at the %(eventname)s: %(pentabarf:title)s von %(attendee)s
-%(summary)s
-Diese Veranstaltung findet %(location)s statt.
-Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
         # channel/nick, Event name, refresh interval, announcetime, xcal URL, announce message
         self.locations = {'workshop': 'im Workshopraum',
                 'outdoor': 'im Freien',
                 'contest': 'in einem VPN',
                 'musicstage': 'auf der Musicstage'}
         self.events = {'mrmcd': ("#mrmcd111b", "MRMCDs", 180, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
+        self.events['oldmrmcd'] = ("#mrmcd110b", "Metarheinmain chaosdays 110b", 180, 600, "http://events.ccc.de/congress/2007/Fahrplan/schedule.en.xcs", ANNOUNCEMESSAGE)
         self.LoadSettings()
     def GetFN(self):
         pass
@@ -148,6 +151,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
         for event in [eventname]:
             # print 'Refreshing %s' % event
             echan, ename, erefint, eantime, eurl, emsg = self.events[event]
+            self.plugin.AddEvent(event, ename, eurl, erefint, eantime, echan, emsg)
             stuff = self.xcals[event]
             try:
                 fhttp = urllib.urlopen(eurl)
@@ -241,6 +245,17 @@ class Xcal(callbacks.Plugin):
         self.feedreader.start()
     def die(self):
         self.feedreader.stop()
+    def AddEvent(self, ename, etitle, eurl, echeckinterval, eannouncetime, echan, emsg):
+        self.registryValue("events").add(ename)
+        group = self.registryValue("events", value=False)
+        group.register(ename)
+        sgroup = self.registryValue("events.%s" % ename, value=False)
+        sgroup.register('title', registry.String(etitle, ''))
+        sgroup.register('url', registry.String(eurl, ''))
+        sgroup.register('checkinterval', registry.Integer(echeckinterval, ''))
+        sgroup.register('announcetime', registry.Integer(eannouncetime, ''))
+        sgroup.register('announcechannel', registry.String(echan, ''))
+        sgroup.register('announcemsg', registry.String(emsg, ''))
 
 
 Class = Xcal
