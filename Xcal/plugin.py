@@ -119,6 +119,7 @@ class FeedReader(threading.Thread):
     def __init__(self, plugin):
         threading.Thread.__init__(self)
         self.plugin = plugin
+        self.log = plugin.log  # convenience reference
         self.xcals = {}
         self.dostop = False
         ANNOUNCEMESSAGE = """==> Upcoming event at the %(eventname)s: %(pentabarf:title)s von %(attendee)s
@@ -130,7 +131,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                 'outdoor': 'im Freien',
                 'contest': 'in einem VPN',
                 'musicstage': 'auf der Musicstage'}
-        self.events = {'mrmcd': ("#mrmcd111b", "MRMCDs", 60, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
+        self.events = {'mrmcd': ("#mrmcd111b", "MRMCDs", 180, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
         self.LoadSettings()
     def GetFN(self):
         pass
@@ -142,7 +143,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
         try:
             self.saved = True
         except Exception, e:
-            sys.stderr.write("Xcal: couldn't write settings: %s\n" % e)
+            self.log.warning("Xcal: couldn't write settings: %s\n" % e)
     def DoRefresh(self, eventname):
         for event in [eventname]:
             # print 'Refreshing %s' % event
@@ -165,15 +166,15 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                 n = len(newevents)
                 if n:
                     msg = '[%s] reload: %d event%s.' % (ename, n, {True: '', False: 's'}[n == 1])
-                    sys.stderr.write("%s\n" % msg)
+                    self.log.info("%s\n" % msg)
                     stuff.events = newevents
                 else:
                     msg = '[%s] reload: no events. Probably lies completely in the past.' % ename
                     stuff.events = newevents
-                    sys.stderr.write("%s\n" % msg)
+                    self.log.info("%s\n" % msg)
             except Exception, e:
                 error = 'Error: couldn\'t update: %s' % str(e)
-                sys.stderr.write("%s\n" % error)
+                self.log.error("%s\n" % error)
     def Makeloc(self, foo):
         bar = locationfoo.search(foo)
         if bar != None:
@@ -198,7 +199,6 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                     while True:
                         try: atime, evt = stuff.events[0]
                         except: break
-                        print "%d %d" % (time(), (atime-eantime))
                         if time() > (atime - eantime):
                             # self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
                             #         modtime.asctime(modtime.localtime(time()))))
