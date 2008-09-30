@@ -45,7 +45,7 @@ import threading
 import sys
 
 diff = 0
-diff = modtime.time() - modtime.mktime((2008,9,6,9,49,00,0,196,1))
+diff = modtime.time() - modtime.mktime((2008,9,6,9,49,58,0,196,1))
 
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
 locationfoo = re.compile("([A-E][0-9]{3})")
@@ -130,7 +130,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                 'outdoor': 'im Freien',
                 'contest': 'in einem VPN',
                 'musicstage': 'auf der Musicstage'}
-        self.events = {'mrmcd': ("#mrmcd111b-test", "MRMCDs", 60, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
+        self.events = {'mrmcd': ("#mrmcd111b", "MRMCDs", 60, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
         self.LoadSettings()
     def GetFN(self):
         pass
@@ -196,12 +196,13 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                     stuff.nextrefresh = time() + erefint
                 try:
                     while True:
-                        try: atime, event = stuff.events[0]
+                        try: atime, evt = stuff.events[0]
                         except: break
+                        print "%d %d" % (time(), (atime-eantime))
                         if time() > (atime - eantime):
                             # self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
                             #         modtime.asctime(modtime.localtime(time()))))
-                            edict = event.dict()
+                            edict = evt.dict()
                             if not 'pentabarf:title' in edict: edict['pentabarf:title'] = "Unbenannte Veranstaltung"
                             if not 'attendee' in edict: edict['attendee'] = "Anonymous coward"
                             if not 'summary' in edict: edict['summary'] = "NO SUMMARY -- REPORT THIS AS A BUG"
@@ -209,7 +210,7 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                             if not 'begintime' in edict: edict['begintime'] = "Keine Ahnung, wann's losgeht"
                             if not 'duration' in edict: edict['duration'] = "Zu lange"
                             edict['duration'] = niceduration(edict['duration'])
-                            edict['location'] = makeloc(edict['location'])
+                            edict['location'] = self.Makeloc(edict['location'])
                             edict['eventname'] = ename
                             amsg = emsg % edict
                             if random() < 0.1:
@@ -217,9 +218,10 @@ Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
                             for aline in amsg.split("\n"):
                                 tmsg = privmsg(echan, aline)
                                 self.plugin.irc.queueMsg(tmsg)
-                            del self.events[0]
+                            del stuff.events[0]
                         else: break
-                except: pass
+                except Exception, e:
+                    print e
             modtime.sleep(10)
     def stop(self):
         self.dostop = True
