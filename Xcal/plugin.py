@@ -40,7 +40,9 @@ from random import random
 import xcalparser
 
 import time as modtime
+import urllib
 import threading
+import sys
 
 diff = 0 # modtime.time() - modtime.mktime((2008,9,6,16,49,00,0,196,1))
 
@@ -100,78 +102,120 @@ def tohessisch(hochteutsch):
     for k in hessisch: hochteutsch = hochteutsch.replace(k, hessisch[k])
     return hochteutsch
 
-def makeloc(foo):
-    bar = locationfoo.search(foo)
-    if bar != None:
-        return 'in Raum %s' % bar.groups()[0]
-    try: return {'workshop': 'im Workshopraum',
-            'outdoor': 'im Freien',
-            'contest': 'in einem VPN',
-            'musicstage': 'auf der Musicstage'}[foo.strip().lower()]
-    except: return 'im/auf/bei/als/foo "%s"' % foo
-
 def time():
     return modtime.time() - diff
+
+class XCalStuff:
+    def __init__(self):
+        self.stopped = True
+        self.xcal = None
+        self.oldxml = ""
+        self.uids = []
+        self.events = []
+        self.nextrefresh = 0
 
 class FeedReader(threading.Thread):
     def __init__(self, plugin):
         threading.Thread.__init__(self)
         self.plugin = plugin
-        self.events = []
-        self.uids = []
+        self.xcals = {}
         self.dostop = False
-        # self.RSSURL = ("mrmcd110b.metarheinmain.de", '/fahrplan/schedule.en.xcs')
-        self.RSSURL = ("www.hcesperer.org", '/temp/mrmcdtmp.txt')
-        # self.RSSURL = ("mrmcd.net", '/schedule/mrmcd111b/schedule.de.xcs')
-        self.REFRESH_INTERVAL = 1800 # 30 mins
-        self.ANNOUNCETIME = 600 # 10 mins
-        self.ANNOUNCEMESSAGE = """==> Gleich fuer euch auf den mrmcds: %(pentabarf:title)s von %(attendee)s
+        ANNOUNCEMESSAGE = """==> Upcoming event at the %(eventname)s: %(pentabarf:title)s von %(attendee)s
 %(summary)s
 Diese Veranstaltung findet %(location)s statt.
 Beginn: %(begintime)s; Dauer: %(duration)s""".replace("\n", " -- ")
-        self.ANNOUNCECHANNEL = '#mrmcd111b'
-    def DoRefresh(self):
+        # channel/nick, Event name, refresh interval, announcetime, xcal URL, announce message
+        self.locations = {'workshop': 'im Workshopraum',
+                'outdoor': 'im Freien',
+                'contest': 'in einem VPN',
+                'musicstage': 'auf der Musicstage'}
+        self.events = {'mrmcd': ("#mrmcd111b-test", "MRMCDs", 1800, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
+        self.LoadSettings(self)
+    def GetFN(self):
+        pass
+    def LoadSettings(self):
+        self.saved = True
+    def SaveSettings(self):
+        if self.saved:
+            return
         try:
-            xcal = xcalparser.XCal(self.RSSURL)
-            newevents = [e for e in xcal.GetPostTimeEvents(time()) if e[1].get('uid') not in self.uids]
-            for event in newevents: self.uids.append(event[1].get('uid'))
-            n = len(newevents)
-            if n:
-                self.plugin.irc.queueMsg(privmsg('#mrmcd111b-bot', 'Added %d new event%s.' % (n, {True: '', False: 's'}[n == 1])))
-                self.events = self.events + newevents
+            self.saved = True
         except Exception, e:
-            self.plugin.irc.queueMsg(privmsg('#mrmcd111b-bot', 'Error: couldn\'t update: %s' % str(e)))
+            sys.stderr.write("Xcal: couldn't write settings: %s\n" % e)
+    def DoRefresh(self, eventname):
+        for event in [eventname]:
+            echan, ename, erefint, eantime, eurl, emsg = self.events[event]
+            try:
+                stuff = self.xcals[event]
+            except:
+                stuff = XCalStuff()
+                self.xcals[event] = stuff
+            try:
+                fhttp = urllib.urlopen(eurl)
+                s = fhttp.read()
+                fhttp.close()
+                if s == stuff.oldxml: continue
+                xcal = xcalparser.XCal(None, s)
+                stuff.xcal = xcal
+                # newevents = [e for e in xcal.GetPostTimeEvents(time()) if e[1].get('uid') not in self.uids]
+                # for event in newevents: stuff.uids.append(event[1].get('uid'))
+                newevents = xcal.GetPostTimeEvents(time())
+                newevents.sort()
+                stuff.uids = newevents
+                n = len(newevents)
+                if n:
+                    msg = 'Updated %s: %d event%s.' % (ename, n, {True: '', False: 's'}[n == 1])
+                    sys.stderr.write("%s\n" % msg)
+                    stuff.events = newevents
+            except Exception, e:
+                error = 'Error: couldn\'t update: %s' % str(e)
+                sys.stderr.write("%s\n" % error)
+    def Makeloc(self, foo):
+        bar = locationfoo.search(foo)
+        if bar != None:
+            return 'in room %s' % bar.groups()[0]
+        try: return self.locations[foo.strip().lower()]
+        except: return 'in/at/on/foo "%s"' % foo
+
     def run(self):
         self.next_refresh = 0
         while not self.dostop:
             modtime.sleep(10)
-            if time() > self.next_refresh:
-                self.DoRefresh()
-                self.next_refresh = time() + self.REFRESH_INTERVAL
-            while True:
-                try: atime, event = self.events[0]
-                except: break
-                if time() > (atime - self.ANNOUNCETIME):
-                    # self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
-                    #         modtime.asctime(modtime.localtime(time()))))
-                    edict = event.dict()
-                    if not 'pentabarf:title' in edict: edict['pentabarf:title'] = "Unbenannte Veranstaltung"
-                    if not 'attendee' in edict: edict['attendee'] = "Anonymous coward"
-                    if not 'summary' in edict: edict['summary'] = "NO SUMMARY -- REPORT THIS AS A BUG"
-                    if not 'location' in edict: edict['location'] = 'foo bar'
-                    if not 'begintime' in edict: edict['begintime'] = "Keine Ahnung, wann's losgeht"
-                    if not 'duration' in edict: edict['duration'] = "Zu lange"
-                    edict['duration'] = niceduration(edict['duration'])
-                    edict['location'] = makeloc(edict['location'])
-                    amsg = self.ANNOUNCEMESSAGE % edict
-                    if random() < 0.1:
-                        amsg = tohessisch(amsg)
-                    for aline in amsg.split("\n"):
-                        tmsg = privmsg(self.ANNOUNCECHANNEL, aline)
-                        self.plugin.irc.queueMsg(tmsg)
-                    del self.events[0]
-                    modtime.sleep(10)
-                else: break
+            for event in self.events:
+                echan, ename, erefint, eantime, eurl, emsg = self.events[event]
+                try:
+                    stuff = self.xcals[event]
+                except:
+                    stuff = XCalStuff()
+                    self.xcals[event] = stuff
+                if time() > self.nextrefresh:
+                    self.DoRefresh(event)
+                    stuff.nextrefresh = time() + erefint
+                while True:
+                    try: atime, event = self.events[0]
+                    except: break
+                    if time() > (atime - self.ANNOUNCETIME):
+                        # self.plugin.irc.queueMsg(privmsg(self.ANNOUNCECHANNEL, "Aktuelles Datum aus Sicht des Bot: %s" %
+                        #         modtime.asctime(modtime.localtime(time()))))
+                        edict = event.dict()
+                        if not 'pentabarf:title' in edict: edict['pentabarf:title'] = "Unbenannte Veranstaltung"
+                        if not 'attendee' in edict: edict['attendee'] = "Anonymous coward"
+                        if not 'summary' in edict: edict['summary'] = "NO SUMMARY -- REPORT THIS AS A BUG"
+                        if not 'location' in edict: edict['location'] = 'foo bar'
+                        if not 'begintime' in edict: edict['begintime'] = "Keine Ahnung, wann's losgeht"
+                        if not 'duration' in edict: edict['duration'] = "Zu lange"
+                        edict['duration'] = niceduration(edict['duration'])
+                        edict['location'] = makeloc(edict['location'])
+                        edict['eventname'] = ename
+                        amsg = emsg % edict
+                        if random() < 0.1:
+                            amsg = tohessisch(amsg)
+                        for aline in amsg.split("\n"):
+                            tmsg = privmsg(echan, aline)
+                            self.plugin.irc.queueMsg(tmsg)
+                        del self.events[0]
+                        modtime.sleep(10)
+                    else: break
     def stop(self):
         self.dostop = True
 
