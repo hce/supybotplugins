@@ -294,6 +294,21 @@ class Xcal(callbacks.Plugin):
         sgroup.register('announcetime', registry.Integer(eannouncetime, ''))
         sgroup.register('announcechannel', registry.String(echan, ''))
         sgroup.register('announcemsg', registry.String(emsg, ''))
+        self.feedreader.events[ename] = (echan, etitle, echeckinterval, eannouncetime, eurl, emsg)
+    def addevent(self, irc, msg, args, ccc, channel, ename, eurl, echeckinterval, eatime, etitle):
+        """addevent <channel> <eventname> <xcal feed url> <xcal check interval> <time in seconds to announce event before it takes place> <title of the converence>
+
+        Adds a new conference.
+          channel:   channel to announce conference events in
+          eventname: (internal) name of the conference (no spaces)
+          xcal feed: url to the xcal feed
+          check intelval: in seconds. 1800 is a reasonable value.
+          announcetime: how many seconds in advance to the event should it be announced? 600 is a reasonable default.
+          title: public title of the conference"""
+        self.AddEvent(ename, etitle, eurl, echeckinterval, eatime, channel, ANNOUNCEMESSAGE)
+        irc.replySuccess()
+    addevent = wrap(addevent, ['op', 'channel', 'eventName', 'url', 'positiveInt', 'positiveInt', 'text'])
+                    
 
 
 Class = Xcal
