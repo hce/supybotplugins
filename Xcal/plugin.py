@@ -31,6 +31,7 @@
 import supybot.utils as utils
 from supybot.commands import *
 import supybot.plugins as plugins
+import supybot.conf as conf
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 import supybot.registry as registry
@@ -55,6 +56,13 @@ ANNOUNCEMESSAGE = """==> Upcoming event at the %(eventname)s: %(pentabarf:title)
 %(summary)s
 This event takes place %(location)s.
 Start: %(begintime)s; Duration: %(duration)s""".replace("\n", " -- ")
+
+def getEventName(irc, msg, args, state):
+    if not registry.isValidRegistryName(args[0]):
+        state.errorInvalid('event name', args[0],
+                           'Illegal event name')
+    state.args.append(callbacks.canonicalName(args.pop(0)))
+addConverter('eventName', getEventName)
 
 def niceduration(duration):
     try:
@@ -133,25 +141,53 @@ class FeedReader(threading.Thread):
                 'outdoor': 'im Freien',
                 'contest': 'in einem VPN',
                 'musicstage': 'auf der Musicstage'}
-        self.events = {'mrmcd': ("#mrmcd111b", "MRMCDs", 180, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
-        self.events['oldmrmcd'] = ("#mrmcd110b", "Metarheinmain chaosdays 110b", 180, 600, "http://events.ccc.de/congress/2007/Fahrplan/schedule.en.xcs", ANNOUNCEMESSAGE)
+        #self.events = {'mrmcd': ("#mrmcd111b", "MRMCDs", 180, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
+        #self.events['oldmrmcd'] = ("#mrmcd110b", "Metarheinmain chaosdays 110b", 180, 600, "http://events.ccc.de/congress/2007/Fahrplan/schedule.en.xcs", ANNOUNCEMESSAGE)
+        self.events = {}
         self.LoadSettings()
     def GetFN(self):
         pass
     def LoadSettings(self):
-        self.saved = True
-    def SaveSettings(self):
-        if self.saved:
-            return
-        try:
-            self.saved = True
-        except Exception, e:
-            self.log.warning("Xcal: couldn't write settings: %s\n" % e)
+        # self.plugin.AddEvent("event", "ename", "eurl", 123, 456, "#echan", "emsg")
+        # self.plugin.AddEvent("mrmcd111b", "Metarheinmain ChaosDays 111b", "http://www.hcesperer.org/temp/mrmcdtmp.txt", 180, 600, "#mrmcd111b", ANNOUNCEMESSAGE)
+        events = self.plugin.registryValue("events")# , value=False).getValues(False)
+        for event in events:
+            self.plugin.registryValue("events").add(event)
+            group = self.plugin.registryValue("events", value=False)
+            subgroup = group.register(event)
+            R_STRING = lambda: registry.String('', '', False)
+            R_INT = lambda: registry.Integer(0, '', False)
+            for datatype, value in [(R_STRING, 'title'),
+                    (R_STRING, 'url'),
+                    (R_INT, 'checkinterval'),
+                    (R_INT, 'announcetime'),
+                    (R_STRING, 'announcechannel'),
+                    (R_STRING, 'announcemsg')
+            ]:
+                subgroup.register(value, datatype())
+        events = self.plugin.registryValue("events", value=False).getValues(False)
+        vkeyre = re.compile(r'\.([^\.]+)$')
+        for ename, esettings in events:
+            settings = esettings.getValues(False)
+            setdict = {}
+            for vkey, vname in settings:
+                try:
+                    vkeyname = vkeyre.search(vkey).groups()[0]
+                except:
+                    continue
+                setdict[vkeyname] = vname.value
+            self.events[ename] = (
+                    setdict['announcechannel'],
+                    setdict['title'],
+                    setdict['checkinterval'],
+                    setdict['announcetime'],
+                    setdict['url'],
+                    setdict['announcemsg']
+            )
     def DoRefresh(self, eventname):
         for event in [eventname]:
             # print 'Refreshing %s' % event
             echan, ename, erefint, eantime, eurl, emsg = self.events[event]
-            self.plugin.AddEvent(event, ename, eurl, erefint, eantime, echan, emsg)
             stuff = self.xcals[event]
             try:
                 fhttp = urllib.urlopen(eurl)
@@ -243,13 +279,15 @@ class Xcal(callbacks.Plugin):
         self.feedreader = FeedReader(self)
         self.feedreader.setDaemon(True)
         self.feedreader.start()
-    def die(self):
-        self.feedreader.stop()
+    def __del__(self):
+        if hasattr(self.base, "__del__"):
+            self.feedreader.stop()
+            self.base.__del__(self)
     def AddEvent(self, ename, etitle, eurl, echeckinterval, eannouncetime, echan, emsg):
         self.registryValue("events").add(ename)
         group = self.registryValue("events", value=False)
         group.register(ename)
-        sgroup = self.registryValue("events.%s" % ename, value=False)
+        sgroup = self.registryValue(registry.join(["events", ename]), value=False)
         sgroup.register('title', registry.String(etitle, ''))
         sgroup.register('url', registry.String(eurl, ''))
         sgroup.register('checkinterval', registry.Integer(echeckinterval, ''))

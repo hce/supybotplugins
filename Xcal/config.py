@@ -33,13 +33,7 @@ import supybot.registry as registry
 import supybot.callbacks as callbacks
 import re
 
-class FoobarSeparatedListOfStrings(registry.SeparatedListOf):
-    Value = registry.String
-    def splitter(self, s):
-        return re.split(r'\s*===\s*', s)
-    joiner = '==='.join
-
-class EventNames(FoobarSeparatedListOfStrings):
+class EventNames(registry.SpaceSeparatedListOfStrings):
     List = callbacks.CanonicalNameSet
 
 def configure(advanced):
