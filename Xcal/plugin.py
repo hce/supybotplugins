@@ -47,7 +47,7 @@ import threading
 import sys
 
 diff = 0
-diff = modtime.time() - modtime.mktime((2008,9,6,9,49,58,0,196,1))
+# diff = modtime.time() - modtime.mktime((2008,9,6,9,49,58,0,196,1))
 
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
 locationfoo = re.compile("([A-E][0-9]{3})")
