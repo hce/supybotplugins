@@ -279,7 +279,6 @@ class FeedReader(threading.Thread):
                 except Exception, e:
                     self.log.error("[%s] Exception: %s" % (event, e))
             modtime.sleep(10)
-            self.log.info("tick")
     def stop(self):
         self.dostop = True
 
