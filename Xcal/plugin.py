@@ -230,11 +230,13 @@ class FeedReader(threading.Thread):
         except: return 'in/at/on/foo "%s"' % foo
 
     def run(self):
-        self.next_refresh = 0
+        modtime.sleep(10)  # An initial "sleep of safety" ;-/
         while not self.dostop:
             # Not nice, but the supybot registry system forces us
             # to do this ;-/
+            self.events = {}
             self.LoadSettings()
+            
             for event in self.events:
                 echan, ename, erefint, eantime, eurl, emsg = self.events[event]
                 try:
@@ -275,8 +277,9 @@ class FeedReader(threading.Thread):
                             del stuff.events[0]
                         else: break
                 except Exception, e:
-                    print e
+                    self.log.error("[%s] Exception: %s" % (event, e))
             modtime.sleep(10)
+            self.log.info("tick")
     def stop(self):
         self.dostop = True
 
