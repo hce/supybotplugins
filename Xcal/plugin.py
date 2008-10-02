@@ -169,13 +169,20 @@ class FeedReader(threading.Thread):
         vkeyre = re.compile(r'\.([^\.]+)$')
         for ename, esettings in events:
             settings = esettings.getValues(False)
+            ename = vkeyre.search(ename).groups()[0]
             setdict = {}
-            for vkey, vname in settings:
-                try:
-                    vkeyname = vkeyre.search(vkey).groups()[0]
-                except:
-                    continue
-                setdict[vkeyname] = vname.value
+            try:
+                for vkey, vname in settings:
+                    try:
+                        vkeyname = vkeyre.search(vkey).groups()[0]
+                    except:
+                        continue
+                    setdict[vkeyname] = vname.value
+            except Exception, e:
+                self.log.warning("[%s] illegal conference settings; removing conference" % ename)
+                conf.supybot.plugins.Xcal.events().remove(ename)
+                conf.supybot.plugins.Xcal.events.unregister(ename)
+                continue
             self.events[ename] = (
                     setdict['announcechannel'],
                     setdict['title'],
@@ -225,6 +232,9 @@ class FeedReader(threading.Thread):
     def run(self):
         self.next_refresh = 0
         while not self.dostop:
+            # Not nice, but the supybot registry system forces us
+            # to do this ;-/
+            self.LoadSettings()
             for event in self.events:
                 echan, ename, erefint, eantime, eurl, emsg = self.events[event]
                 try:
@@ -252,7 +262,11 @@ class FeedReader(threading.Thread):
                             edict['duration'] = niceduration(edict['duration'])
                             edict['location'] = self.Makeloc(edict['location'])
                             edict['eventname'] = ename
-                            amsg = emsg % edict
+                            try:
+                                amsg = emsg % edict
+                            except Exception, e:
+                                amsg = ANNOUNCEMESSAGE % edict
+                                self.log.warning("[%s] Erraneous announce message; used default one. (%s)" % (event, e))
                             if random() < 0.1:
                                 amsg = tohessisch(amsg)
                             for aline in amsg.split("\n"):
