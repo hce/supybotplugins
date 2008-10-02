@@ -269,8 +269,8 @@ class FeedReader(threading.Thread):
                             except Exception, e:
                                 amsg = ANNOUNCEMESSAGE % edict
                                 self.log.warning("[%s] Erraneous announce message; used default one. (%s)" % (event, e))
-                            if random() < 0.1:
-                                amsg = tohessisch(amsg)
+                            # if random() < 0.1:
+                            #    amsg = tohessisch(amsg)
                             for aline in amsg.split("\n"):
                                 tmsg = privmsg(echan, aline)
                                 self.plugin.irc.queueMsg(tmsg)
