@@ -52,7 +52,7 @@ diff = 0
 durationfoo = re.compile("([0-9]+)H([0-9]+)M([0-9]+)S")
 locationfoo = re.compile("([A-E][0-9]{3})")
 
-ANNOUNCEMESSAGE = """==> Upcoming event at the %(eventname)s: %(pentabarf:title)s von %(attendee)s
+ANNOUNCEMESSAGE = """==> Upcoming event at the %(eventname)s: %(pentabarf:title)s by %(attendee)s
 %(summary)s
 This event takes place %(location)s.
 Start: %(begintime)s; Duration: %(duration)s""".replace("\n", " -- ")
@@ -69,17 +69,17 @@ def niceduration(duration):
         [hrs, mins, secs] = [int(foo) for foo in durationfoo.search(duration).groups()]
         s = []
         if hrs != 0:
-            if hrs == 1: s.append("Eine Stunde")
-            else: s.append("%s Stunden" % hrs)
+            if hrs == 1: s.append("one hour")
+            else: s.append("%s hours" % hrs)
         if mins != 0:
-            if mins == 1: s.append("eine Minute")
-            else: s.append("%d Minuten" % mins)
+            if mins == 1: s.append("one minute")
+            else: s.append("%d minutes" % mins)
         if secs != 0:
-            if secs == 1: s.append("eine Sekunde")
-            else: s.append("%d Sekunden" % secs)
+            if secs == 1: s.append("one second")
+            else: s.append("%d seconds" % secs)
         if len(s) == 1: return s[0]
-        elif len(s) == 2: return " und ".join(s)
-        else: return "%s, %s und %s" % tuple(s)
+        elif len(s) == 2: return " and ".join(s)
+        else: return "%s, %s and %s" % tuple(s)
     except: return duration
 
 # eher darmstaedter dialekt
@@ -137,10 +137,10 @@ class FeedReader(threading.Thread):
         self.xcals = {}
         self.dostop = False
         # channel/nick, Event name, refresh interval, announcetime, xcal URL, announce message
-        self.locations = {'workshop': 'im Workshopraum',
-                'outdoor': 'im Freien',
-                'contest': 'in einem VPN',
-                'musicstage': 'auf der Musicstage'}
+        self.locations = {'workshop': 'in the workshoparea',
+                'outdoor': 'outdoors',
+                'contest': 'in a VPN',
+                'musicstage': 'on the musicstage'}
         #self.events = {'mrmcd': ("#mrmcd111b", "MRMCDs", 180, 600, "http://www.hcesperer.org/temp/mrmcdtmp.txt", ANNOUNCEMESSAGE)}
         #self.events['oldmrmcd'] = ("#mrmcd110b", "Metarheinmain chaosdays 110b", 180, 600, "http://events.ccc.de/congress/2007/Fahrplan/schedule.en.xcs", ANNOUNCEMESSAGE)
         self.events = {}
