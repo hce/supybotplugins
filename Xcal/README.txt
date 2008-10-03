@@ -4,3 +4,14 @@ and posts the events in IRC channels. Simply load the plugin, have
 your bot join the channels you want the announcements to be posted to,
 and issue:
 
+!help xcal addevent
+
+This should explain everything. ;-)
+
+After you've added conferences, you can change individual settings by using the
+supybot registry system. Simply do
+
+!config supybot.plugins.xcal.events.$(EVENT_SHORT_NAME).$(SETTING) NEW_VALUE
+
+
+For more details, please visit http://www.pentabarf.org
