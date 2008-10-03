@@ -15,3 +15,60 @@ supybot registry system. Simply do
 
 
 For more details, please visit http://www.pentabarf.org
+
+
+=== COPIED FROM PENTABARF.ORG WIKI ===
+
+There's a supybot plugin which can be used to announce talks and events in an
+IRC channel. It was first used at the MetaRheinMain Chaosdays 111b.
+Announcements look like this:
+
+  <mrmcdinfo> ==> Gleich fuer euch auf den mrmcds: mrmcd111b closing event von
+  g0ph3r, Risktaker und Jonas Lerch -- mrmcd111b closing event- what happened and
+  have a nice trip home -- Diese Veranstaltung findet in Raum C205 statt. --
+  Beginn: 17:30; Dauer: 30 Minuten
+
+To use the plugin, you need to install supybot first, and set up a bot. (Refer
+to the supybot website for information on how to do this) The Xcal plugin, as
+the name indicates, gets the event information from the xcal version of the
+pentabarf schedule.
+
+To set up Xcal, you have to copy it into the supybot plugin directory, then
+load it:
+
+  /msg $(NAME_OF_YOUR_BOT) Load Xcal
+
+Next, make sure your bot is joined in the channel you want the announcements to
+be posted. Then issue in this channel:
+
+  !addevent mrmcd http://www.hcesperer.org/temp/mrmcdtmp.txt 1800 600 Metarheinmain Chaosdays 111b
+
+Where mrmcd is a short name for your conference,
+http://www.hcesperer.org/temp/mrmcdtmp.txt is the (publicly accessibly) URL to
+your xcal schedule, 1800 the xcal refresh interval, 600 the number of seconds
+to announce an event in advance, and Metarheinmain Chaosdays 111b is the full
+title of the conference.
+
+You may add multiple conferences.
+
+If you want to change settings, use the supybot registry system. For example,
+to change the xcal url to http://foo.bar/xcal.txt, issue
+
+  /msg $(NAME_OF_YOUR_BOT) config supybot.plugins.Xcal.events.mrmcd.url http://foo.bar/xcal.txt
+
+To change the announce message, use the variable
+supybot.plugins.Xcal.events.$(YOUR_EVENT_NAME).announcemsg .
+
+You can checkout the current codebase here:
+
+  git clone http://www.hcesperer.org/supybot/supybotplugins.git
+
+Or, you fetch the current tarball:
+
+  http://www.hcesperer.org/supybot/Xcal.tar.bz2
+
+If you want to test the plugin, you may want to set up a test irc server. You
+may use my zero-configuration python ircd for that purpose.
+
+Questions? Contact the author using hc@hcesperer.org or jabber: esperer@jabber.ccc.de
+
